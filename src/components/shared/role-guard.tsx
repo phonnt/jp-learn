@@ -15,7 +15,7 @@ export function RoleGuard({ allowedRoles, children, fallback }: RoleGuardProps) 
   const router = useRouter()
   const [role, setRole] = useState<TUserRole['role'] | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
+  const [supabase] = useState(() => createClient())
 
   useEffect(() => {
     async function check() {

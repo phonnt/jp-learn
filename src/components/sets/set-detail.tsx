@@ -21,10 +21,7 @@ import {
   Play,
   Trash2,
   Copy,
-  Users,
-  FolderPlus,
   AlertTriangle,
-  Download,
   Ear,
   ListChecks,
 } from 'lucide-react'

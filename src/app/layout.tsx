@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   description: "Học tiếng Nhật với flashcard, quiz, và spaced repetition",
   manifest: "/manifest.json",
   appleWebApp: { capable: true, title: "JP-Learn", statusBarStyle: "black-translucent" },
+  icons: { icon: "/favicon.svg", apple: "/icon-192.svg" },
 };
 
 export default function RootLayout({

@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { LayoutDashboard, LogOut, Plus, User } from 'lucide-react'
+import { LayoutDashboard, LogOut, Plus, User, Target, Award, Settings } from 'lucide-react'
 
 export function Navbar() {
   const router = useRouter()
@@ -63,11 +63,11 @@ export function Navbar() {
                     Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/goals')}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <Target className="mr-2 h-4 w-4" />
                     Mục tiêu
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/badges')}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <Award className="mr-2 h-4 w-4" />
                     Thành tích
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/profile')}>
@@ -75,7 +75,7 @@ export function Navbar() {
                     Hồ sơ
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    <User className="mr-2 h-4 w-4" />
+                    <Settings className="mr-2 h-4 w-4" />
                     Cài đặt
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

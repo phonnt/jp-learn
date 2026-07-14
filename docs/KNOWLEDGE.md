@@ -71,6 +71,35 @@
 - i18n: `lib/i18n.ts` (vi/en dictionary + 60+ keys, setLocale/getLocale, persist to localStorage), locale switcher trong settings page
 - 103 file TypeScript + 9 public files, build pass
 
+## 2026-07-14 — Deploy lên Supabase + Vercel
+
+- Tạo Supabase project `jp-learn` (region ap-southeast-1): https://lqegplpngdodkmxzrpdi.supabase.co
+- Apply migrations: 18 tables (users, sets, terms, study_sessions, study_results, reviews, folders, folder_sets, favorites, comments, reports, set_collaborators, user_roles, user_goals, daily_progress, user_xp, badges, user_badges)
+- Apply RLS policies cho tất cả tables, seed 12 badges, tạo function increment_daily_progress
+- Thêm env vars lên Vercel (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
+- Deploy thành công: https://jp-learn-phonnts-projects.vercel.app
+
+## 2026-07-14 — Icon, Loading, UI fixes
+
+- Icon mới: favicon.svg (huy hiệu "日" trên nền đen), icon-192.svg, icon-512.svg, cập nhật manifest.json, metadata layout icons
+- Global loading: `src/app/loading.tsx` (skeleton grid 8 cards)
+- Cập nhật CONVENTIONS.md section 7: Loading & Empty states rules
+- Cập nhật AI_AGENTS.md edge cases: loading.tsx per route segment
+- Fix high-priority UI issues:
+  - Dark mode: thêm custom color tokens (.dark override cho canvas, paper, ink, hairline, mid-gray, ember)
+  - `--font-sans` circular reference → sửa thành `var(--font-geist)`
+  - Radius tokens: thay calc(...) bằng fixed values (6/10/14/18/24/32px), thêm named radii
+  - `useSession()`: useState(() => createClient()) để cache supabase client, tránh effect loop
+  - `RoleGuard`: same fix + useState lazy init
+  - Xoá unused imports `Users`, `FolderPlus`, `Download` trong set-detail
+  - Navbar icons: Mục tiêu (Target), Thành tích (Award), Cài đặt (Settings) — distinct icons
+   - Xoá favicon.ico cũ (thay bằng favicon.svg)
+- Align shadcn CSS vars với design tokens: `:root` dùng hex values từ DESIGN.md thay vì OKLCH
+- Add design token rules vào CONVENTIONS.md section 5 (color classes, radius, typography, shadows)
+- Add design check step vào AI_AGENTS.md checklist
+- Build pass và `/// <reference types="@types/react-dom" />` vào next-env.d.ts, xoá import `.next/types/routes.d.ts`. Tạo `.vscode/settings.json` + `extensions.json`
+- Build pass (tsc --noEmit + next build đều OK)
+
 ## 2026-07-14 — Phase 2 hoàn thành
 
 - Hard words focus: `actions/hard-words.ts` (query study_results wrong terms + reviews low EF), `components/study/hard-words-mode.tsx` (learn mode chỉ dành cho thẻ khó), route `/sets/[setId]/hard-words`

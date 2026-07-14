@@ -34,6 +34,7 @@ flowchart TD
 - [ ] **Check `docs/CONVENTIONS.md`** — naming, imports, component patterns
 - [ ] **Check `docs/ARCHITECTURE.md`** — data flow, component placement
 - [ ] **Check `docs/DESIGN.md`** — colors, spacing, component styling
+- [ ] **Check `docs/CONVENTIONS.md#5-styling`** — design token classes, radius rules
 - [ ] **Read files liên quan** trong `src/` để hiểu code hiện tại
 - [ ] **Check file structure** trong feature folder — có file nào có thể tái sử dụng không?
 
@@ -132,7 +133,7 @@ export async function createSet(formData: FormData) {
 
 ## 7. Edge cases phải luôn xử lý
 
-- **Loading state**: khi fetch data, luôn show skeleton (`<Skeleton>` from shadcn)
+- **Loading state**: khi fetch data, luôn show skeleton (`<Skeleton>` from shadcn). Tạo `loading.tsx` cho mỗi route segment có list/grid data
 - **Empty state**: "No sets yet. Create your first set!"
 - **Error state**: toast + fallback UI, không crash page
 - **Unauthenticated**: redirect to `/auth/login` với return URL
