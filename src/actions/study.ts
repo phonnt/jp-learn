@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { calculateSM2 } from '@/lib/sm2'
+import { checkAndAwardBadges } from './badges'
 
 export async function startStudySession(setId: string, mode: string) {
   const supabase = await createClient()
@@ -82,6 +83,9 @@ export async function saveStudyResults(
       .insert({ user_id: user.id, xp: earnedXp, level: 1 })
   }
 
+  // Check badges
+  const badgeResult = await checkAndAwardBadges()
+
   // Update daily progress
   const today = new Date().toISOString().split('T')[0]
   const { data: dp } = await supabase
@@ -111,7 +115,7 @@ export async function saveStudyResults(
       })
   }
 
-  return { success: true, earnedXp }
+  return { success: true, earnedXp, newBadges: badgeResult?.awarded || [] }
 }
 
 export async function saveReview(termId: string, quality: number, timeSpentMs: number) {

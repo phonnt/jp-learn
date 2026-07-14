@@ -66,6 +66,10 @@ export function Navbar() {
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Mục tiêu
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/badges')}>
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    Thành tích
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/profile')}>
                     <User className="mr-2 h-4 w-4" />
                     Hồ sơ

@@ -1,10 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { MatchGame } from '@/components/study/match-game'
+import { SpellMode } from '@/components/study/spell-mode'
 
 export const dynamic = 'force-dynamic'
 
-export default async function MatchPage({ params }: { params: Promise<{ setId: string }> }) {
+export default async function SpellPage({ params }: { params: Promise<{ setId: string }> }) {
   const { setId } = await params
   const supabase = await createClient()
 
@@ -26,10 +26,10 @@ export default async function MatchPage({ params }: { params: Promise<{ setId: s
     <div className="mx-auto max-w-3xl space-y-6 p-6">
       <div className="text-center">
         <h1 className="text-heading-sm font-semibold text-ink">{set.title}</h1>
-        <p className="text-mid-gray">Ghép từ với nghĩa</p>
+        <p className="text-mid-gray">Nghe và gõ chính tả</p>
       </div>
-      <MatchGame
-        terms={(terms || []).map(t => ({ id: t.id, term: t.term, definition: t.definition }))}
+      <SpellMode
+        terms={(terms || []).map(t => ({ id: t.id, term: t.term, definition: t.definition, reading: t.reading }))}
       />
     </div>
   )

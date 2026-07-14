@@ -43,6 +43,17 @@
 - Folders: `actions/folders.ts`, pages (list, create, detail), folder_sets CRUD
 - Build passes (Phase 1 + Phase 2 core features)
 
+## 2026-07-14 — Phase 3: Nâng cao
+
+- Match game: `hooks/use-match.ts` (Zustand, timer, scoring, best score), `components/study/match-game.tsx` (click-to-match grid, animation), route `/sets/[id]/match`
+- Spell mode: `hooks/use-spell.ts` (Web Speech API TTS, speed control), `components/study/spell-mode.tsx` (nghe + gõ, hint, feedback), route `/sets/[id]/spell`
+- Test generator: `components/study/test-generator.tsx` (3 dạng: multiple-choice, written, true/false, trộn ngẫu nhiên, chấm điểm), route `/sets/[id]/test`
+- Auto-play flashcard: `components/study/auto-play-flashcard.tsx` (slideshow auto, điều chỉnh tốc độ 2-10s, pause/play, shuffle), route `/sets/[id]/auto-play`
+- Badges system: `lib/badges.ts` (12 badges definitions, check logic), `actions/badges.ts` (server-side checkAndAwardBadges), `components/dashboard/badges-page-client.tsx` (grid badges earned/locked), route `/badges`
+- Tích hợp badge check vào `saveStudyResults` — tự động kiểm tra và award sau mỗi buổi học
+- Thêm link Spell, Test, Auto-play, Match, Hard words, Badges vào set-detail + navbar
+- Tổng số ~85 file TypeScript, build pass
+
 ## 2026-07-14 — Phase 2 hoàn thành
 
 - Hard words focus: `actions/hard-words.ts` (query study_results wrong terms + reviews low EF), `components/study/hard-words-mode.tsx` (learn mode chỉ dành cho thẻ khó), route `/sets/[setId]/hard-words`

@@ -22,6 +22,8 @@ import {
   FolderPlus,
   AlertTriangle,
   Download,
+  Ear,
+  ListChecks,
 } from 'lucide-react'
 import type { TSet, TTerm } from '@/types'
 
@@ -97,6 +99,18 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
           <Link href={`/sets/${set.id}/quiz`}>
             <FileText className="mr-1 h-4 w-4" />
             Quiz
+          </Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link href={`/sets/${set.id}/spell`}>
+            <Ear className="mr-1 h-4 w-4" />
+            Spell
+          </Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link href={`/sets/${set.id}/test`}>
+            <ListChecks className="mr-1 h-4 w-4" />
+            Test
           </Link>
         </Button>
         <Button variant="outline" asChild>
