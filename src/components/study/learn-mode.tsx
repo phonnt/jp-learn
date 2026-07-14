@@ -107,20 +107,20 @@ export function LearnMode({ setId, title }: LearnModeProps) {
     const percent = total > 0 ? Math.round((correctCount / total) * 100) : 0
     return (
       <div className="mx-auto max-w-lg space-y-6 text-center">
-        <h2 className="text-heading-sm font-semibold text-ink">Buổi học hoàn thành!</h2>
+        <h2 className="text-heading-sm font-semibold text-charcoal">Buổi học hoàn thành!</h2>
         <Card>
-          <CardContent className="p-8">
-            <div className="text-5xl font-bold text-ink">{correctCount}/{total}</div>
-            <p className="mt-2 text-lg text-mid-gray">{percent}% đúng</p>
+          <CardContent className="p-4">
+            <div className="text-5xl font-bold text-charcoal">{correctCount}/{total}</div>
+            <p className="mt-2 text-lg text-fog">{percent}% đúng</p>
             {percent >= 80 ? (
               <p className="mt-2 text-sm text-green-600">Tuyệt vời! Tiếp tục duy trì nhé!</p>
             ) : percent >= 50 ? (
-              <p className="mt-2 text-sm text-mid-gray">Cố gắng hơn nữa nhé!</p>
+              <p className="mt-2 text-sm text-fog">Cố gắng hơn nữa nhé!</p>
             ) : (
               <p className="mt-2 text-sm text-ember">Hãy ôn lại các thẻ này!</p>
             )}
             <Button className="mt-6" onClick={() => { setCompleted(false); setCurrentIndex(0); setResults([]); initSession() }}>
-              <RotateCw className="mr-1 h-4 w-4" />
+              <RotateCw className="mr-1 h-5 w-5" />
               Học lại
             </Button>
           </CardContent>
@@ -133,10 +133,10 @@ export function LearnMode({ setId, title }: LearnModeProps) {
     return (
       <div className="mx-auto max-w-lg space-y-6 text-center">
         <Card>
-          <CardContent className="p-8">
+          <CardContent className="p-4">
             <Check className="mx-auto h-10 w-10 text-green-600" />
-            <h3 className="mt-4 text-lg font-medium text-ink">Tất cả thẻ đã được ôn tập!</h3>
-            <p className="mt-1 text-sm text-mid-gray">Quay lại sau để ôn các thẻ mới.</p>
+            <h3 className="mt-4 text-lg font-medium text-charcoal">Tất cả thẻ đã được ôn tập!</h3>
+            <p className="mt-1 text-sm text-fog">Quay lại sau để ôn các thẻ mới.</p>
           </CardContent>
         </Card>
       </div>
@@ -147,7 +147,7 @@ export function LearnMode({ setId, title }: LearnModeProps) {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-between text-sm text-mid-gray">
+      <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {terms.length}</span>
         <Badge variant="secondary" className="text-xs">
           {isCorrect === null ? 'Trả lời' : isCorrect ? 'Đúng' : 'Sai'}
@@ -157,11 +157,11 @@ export function LearnMode({ setId, title }: LearnModeProps) {
       <Progress value={progress} className="h-1" />
 
       <Card>
-        <CardContent className="p-8 text-center">
-          <p className="mb-2 text-xs text-mid-gray">Nhập nghĩa của:</p>
-          <p className="text-2xl font-semibold text-ink">{currentTerm.term}</p>
+        <CardContent className="p-4 text-center">
+          <p className="mb-2 text-xs text-fog">Nhập nghĩa của:</p>
+          <p className="text-2xl font-semibold text-charcoal">{currentTerm.term}</p>
           {currentTerm.reading && (
-            <p className="mt-1 text-sm text-mid-gray">{currentTerm.reading}</p>
+            <p className="mt-1 text-sm text-fog">{currentTerm.reading}</p>
           )}
 
           {isCorrect === null ? (
@@ -175,7 +175,7 @@ export function LearnMode({ setId, title }: LearnModeProps) {
               />
               <div className="flex gap-2">
                 <Button className="flex-1" onClick={handleCheckAnswer}>
-                  <Check className="mr-1 h-4 w-4" />
+                  <Check className="mr-1 h-5 w-5" />
                   Kiểm tra
                 </Button>
                 <Button variant="outline" onClick={() => { setIsCorrect(false); handleIncorrect() }}>
@@ -185,17 +185,17 @@ export function LearnMode({ setId, title }: LearnModeProps) {
             </div>
           ) : (
             <div className="mt-6 space-y-4">
-              <div className={`rounded-lg border p-4 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>
+              <div className={`rounded-cards border border-ash p-4 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>
                 <p className={`text-sm font-medium ${isCorrect ? 'text-green-700' : 'text-ember'}`}>
                   {isCorrect ? 'Đúng!' : 'Sai!'}
                 </p>
-                <p className="mt-1 text-ink">
+                <p className="mt-1 text-charcoal">
                   Đáp án: <strong>{currentTerm.definition}</strong>
                 </p>
               </div>
               <Button className="w-full" onClick={handleNext}>
                 {currentIndex >= terms.length - 1 ? 'Kết thúc' : 'Tiếp theo'}
-                <ArrowRight className="ml-1 h-4 w-4" />
+                <ArrowRight className="ml-1 h-5 w-5" />
               </Button>
             </div>
           )}

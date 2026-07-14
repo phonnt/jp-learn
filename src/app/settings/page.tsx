@@ -42,7 +42,7 @@ export default function SettingsPage() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              {theme === 'dark' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               <span className="text-sm text-ink">Chế độ tối</span>
             </div>
             <Switch
@@ -52,7 +52,7 @@ export default function SettingsPage() {
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Globe className="h-4 w-4" />
+              <Globe className="h-5 w-5" />
               <span className="text-sm text-ink">Ngôn ngữ</span>
             </div>
             <Select value={locale} onValueChange={handleLocaleChange}>
@@ -77,7 +77,7 @@ export default function SettingsPage() {
             Xem hồ sơ
           </Button>
           <Button variant="outline" className="w-full justify-start" onClick={() => signOut()}>
-            <LogOut className="mr-2 h-4 w-4" />
+            <LogOut className="mr-2 h-5 w-5" />
             Đăng xuất
           </Button>
         </CardContent>

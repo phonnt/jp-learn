@@ -73,7 +73,7 @@ export function MatchGame({ terms }: MatchGameProps) {
             <p className="mt-2 text-sm text-mid-gray">Best: {Math.max(score, bestScore)} điểm</p>
           )}
           <Button className="mt-6" onClick={reset}>
-            <RotateCw className="mr-1 h-4 w-4" />
+            <RotateCw className="mr-1 h-5 w-5" />
             Chơi lại
           </Button>
         </Card>
@@ -85,7 +85,7 @@ export function MatchGame({ terms }: MatchGameProps) {
     <div className="mx-auto max-w-2xl space-y-6">
       <div className="flex items-center justify-between text-sm text-mid-gray">
         <div className="flex items-center gap-2">
-          <Clock className="h-4 w-4" />
+          <Clock className="h-5 w-5" />
           {formatTime(timer)}
         </div>
         <span>{moves} lượt</span>
@@ -98,12 +98,12 @@ export function MatchGame({ terms }: MatchGameProps) {
             key={card.id}
             onClick={() => selectCard(card.id)}
             disabled={card.matched}
-            className={`rounded-2xl border-2 p-4 text-sm font-medium transition-all ${
+            className={`rounded-cards border-2 p-4 text-sm font-medium transition-all ${
               card.matched
                 ? 'border-green-200 bg-green-50 text-green-600 opacity-50 line-through'
                 : selected === card.id
                   ? 'border-ink bg-ink text-paper'
-                  : 'border-hairline bg-paper text-ink hover:border-mid-gray hover:shadow-sm'
+                  : 'border-ash bg-paper-mist text-charcoal hover:border-fog hover:shadow-sm'
             } ${card.type === 'term' ? 'font-semibold' : ''}`}
           >
             {card.text}

@@ -44,27 +44,27 @@ export function Quiz({ terms }: QuizProps) {
     const percent = Math.round((score / questions.length) * 100)
     return (
       <div className="mx-auto max-w-lg space-y-6 text-center">
-        <h2 className="text-heading-sm font-semibold text-ink">Hoàn thành!</h2>
+        <h2 className="text-heading-sm font-semibold text-charcoal">Hoàn thành!</h2>
         <Card>
-          <CardContent className="p-8">
-            <div className="text-5xl font-bold text-ink">{score}/{questions.length}</div>
-            <p className="mt-2 text-lg text-mid-gray">{percent}% đúng</p>
+          <CardContent className="p-4">
+            <div className="text-5xl font-bold text-charcoal">{score}/{questions.length}</div>
+            <p className="mt-2 text-lg text-fog">{percent}% đúng</p>
             <div className="mt-6 space-y-2">
               {answers.map((a, i) => (
                 <div key={i} className="flex items-center justify-center gap-2 text-sm">
                   {a.correct ? (
-                    <Check className="h-4 w-4 text-green-600" />
+                    <Check className="h-5 w-5 text-green-600" />
                   ) : (
-                    <X className="h-4 w-4 text-ember" />
+                    <X className="h-5 w-5 text-ember" />
                   )}
-                  <span className={a.correct ? 'text-mid-gray' : 'text-ink'}>
+                  <span className={a.correct ? 'text-fog' : 'text-charcoal'}>
                     {questions[i].term}
                   </span>
                 </div>
               ))}
             </div>
             <Button className="mt-6" onClick={reset}>
-              <RotateCw className="mr-1 h-4 w-4" />
+              <RotateCw className="mr-1 h-5 w-5" />
               Làm lại
             </Button>
           </CardContent>
@@ -78,7 +78,7 @@ export function Quiz({ terms }: QuizProps) {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-between text-sm text-mid-gray">
+      <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {questions.length}</span>
         <span>Điểm: {score}</span>
       </div>
@@ -86,9 +86,9 @@ export function Quiz({ terms }: QuizProps) {
       <Progress value={progress} className="h-1" />
 
       <Card>
-        <CardContent className="p-8">
-          <p className="mb-2 text-xs text-mid-gray">Chọn nghĩa đúng của:</p>
-          <p className="mb-6 text-2xl font-semibold text-ink">{question.term}</p>
+        <CardContent className="p-4">
+          <p className="mb-2 text-xs text-fog">Chọn nghĩa đúng của:</p>
+          <p className="mb-6 text-2xl font-semibold text-charcoal">{question.term}</p>
           <div className="space-y-3">
             {question.options.map((option, idx) => (
               <Button

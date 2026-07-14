@@ -17,67 +17,67 @@ export default async function HomePage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   return (
-    <div className="bg-canvas">
-      <section className="border-b border-hairline bg-paper">
-        <div className="mx-auto max-w-screen-xl px-6 py-20 text-center">
-          <h1 className="text-display font-semibold tracking-tight text-ink">
-            Học tiếng Nhật
-            <br />
-            <span className="text-mid-gray">với flashcard thông minh</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-lg text-lg text-mid-gray">
-            Tạo bộ thẻ từ vựng, học với flashcard, kiểm tra với quiz và ghi nhớ lâu hơn với spaced repetition.
-          </p>
-          <div className="mt-8 flex items-center justify-center gap-4">
-            {user ? (
-              <Button size="lg" asChild>
-                <Link href="/dashboard">
-                  Vào học ngay
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+    <div className="bg-canvas-white">
+      <section className="mx-auto max-w-screen-xl px-6 py-20 text-center">
+        <h1 className="text-display font-medium tracking-tight text-charcoal">
+          Học tiếng Nhật
+          <br />
+          <span className="text-fog">với flashcard thông minh</span>
+        </h1>
+        <p className="mx-auto mt-4 max-w-lg text-body-lg text-fog">
+          Tạo bộ thẻ từ vựng, học với flashcard, kiểm tra với quiz và ghi nhớ lâu hơn với spaced repetition.
+        </p>
+        <div className="mt-8 flex items-center justify-center gap-4">
+          {user ? (
+            <Button size="lg" asChild className="rounded-buttons bg-primary-action-fill text-canvas-white hover:opacity-90">
+              <Link href="/dashboard">
+                Vào học ngay
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          ) : (
+            <>
+              <Button size="lg" asChild className="bg-primary-action-fill text-canvas-white hover:opacity-90">
+                <Link href="/auth/register">Bắt đầu miễn phí</Link>
               </Button>
-            ) : (
-              <>
-                <Button size="lg" asChild>
-                  <Link href="/auth/register">Bắt đầu miễn phí</Link>
-                </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <Link href="/auth/login">Đăng nhập</Link>
-                </Button>
-              </>
-            )}
-          </div>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/auth/login">Đăng nhập</Link>
+              </Button>
+            </>
+          )}
         </div>
       </section>
 
-      <section className="mx-auto max-w-screen-xl px-6 py-16">
-        <div className="grid gap-8 md:grid-cols-3">
-          <div className="text-center">
-            <BookOpen className="mx-auto h-10 w-10 text-ink" />
-            <h3 className="mt-4 text-lg font-semibold text-ink">Tạo bộ thẻ</h3>
-            <p className="mt-2 text-sm text-mid-gray">Tự tạo bộ thẻ từ vựng với từ và nghĩa, thêm cách đọc và ví dụ.</p>
-          </div>
-          <div className="text-center">
-            <Brain className="mx-auto h-10 w-10 text-ink" />
-            <h3 className="mt-4 text-lg font-semibold text-ink">Học thông minh</h3>
-            <p className="mt-2 text-sm text-mid-gray">Flashcard, quiz, và spaced repetition giúp ghi nhớ lâu dài.</p>
-          </div>
-          <div className="text-center">
-            <Sparkles className="mx-auto h-10 w-10 text-ink" />
-            <h3 className="mt-4 text-lg font-semibold text-ink">Theo dõi tiến độ</h3>
-            <p className="mt-2 text-sm text-mid-gray">Dashboard theo dõi số thẻ đã học, streak và thành tích.</p>
+      <section className="bg-paper-mist py-16">
+        <div className="mx-auto max-w-screen-xl px-6">
+          <div className="grid gap-8 md:grid-cols-3">
+            <div className="text-center">
+              <BookOpen className="mx-auto h-10 w-10 text-charcoal" />
+              <h3 className="mt-4 text-subheading font-medium text-charcoal">Tạo bộ thẻ</h3>
+              <p className="mt-2 text-body text-fog">Tự tạo bộ thẻ từ vựng với từ và nghĩa, thêm cách đọc và ví dụ.</p>
+            </div>
+            <div className="text-center">
+              <Brain className="mx-auto h-10 w-10 text-charcoal" />
+              <h3 className="mt-4 text-subheading font-medium text-charcoal">Học thông minh</h3>
+              <p className="mt-2 text-body text-fog">Flashcard, quiz, và spaced repetition giúp ghi nhớ lâu dài.</p>
+            </div>
+            <div className="text-center">
+              <Sparkles className="mx-auto h-10 w-10 text-charcoal" />
+              <h3 className="mt-4 text-subheading font-medium text-charcoal">Theo dõi tiến độ</h3>
+              <p className="mt-2 text-body text-fog">Dashboard theo dõi số thẻ đã học, streak và thành tích.</p>
+            </div>
           </div>
         </div>
       </section>
 
       {featuredSets && featuredSets.length > 0 && (
-        <section className="border-t border-hairline bg-paper">
+        <section className="border-t border-ash bg-canvas-white">
           <div className="mx-auto max-w-screen-xl space-y-6 px-6 py-16">
             <div className="flex items-center justify-between">
-              <h2 className="text-heading-sm font-semibold text-ink">Bộ thẻ nổi bật</h2>
-              <Button variant="ghost" asChild>
+              <h2 className="text-heading-sm font-medium text-charcoal">Bộ thẻ nổi bật</h2>
+              <Button variant="outline" size="sm" asChild>
                 <Link href="/sets">
-                  Xem tất cả <ArrowRight className="ml-1 h-4 w-4" />
+                  Xem tất cả <ArrowRight className="ml-1 h-5 w-5" />
                 </Link>
               </Button>
             </div>

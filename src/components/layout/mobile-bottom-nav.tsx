@@ -23,7 +23,7 @@ export function MobileBottomNav() {
   if (isAuthPage) return null
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-hairline bg-paper md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-ash bg-paper-mist md:hidden">
       <div className="flex items-center justify-around h-14">
         {navItems.map((item) => {
           if (item.authRequired && !user) return null
@@ -34,7 +34,7 @@ export function MobileBottomNav() {
               href={item.href}
               className={cn(
                 'flex flex-col items-center justify-center gap-0.5 px-3 py-1 text-xs transition-colors',
-                isActive ? 'text-ink' : 'text-mid-gray'
+                isActive ? 'text-charcoal' : 'text-fog'
               )}
             >
               <item.icon className="h-5 w-5" />

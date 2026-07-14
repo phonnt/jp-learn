@@ -27,7 +27,7 @@ export default async function FoldersPage() {
         </div>
         <Button asChild>
           <Link href="/folders/new">
-            <FolderPlus className="mr-1 h-4 w-4" />
+            <FolderPlus className="mr-1 h-5 w-5" />
             Tạo folder
           </Link>
         </Button>
@@ -38,7 +38,7 @@ export default async function FoldersPage() {
           {folders.map(folder => (
             <Link key={folder.id} href={`/folders/${folder.id}`}>
               <Card className="transition-shadow hover:shadow-md">
-                <CardContent className="flex items-center gap-4 p-5">
+                <CardContent className="flex items-center gap-4 p-4">
                   <FolderOpen className="h-8 w-8 text-mid-gray" />
                   <div>
                     <h3 className="font-medium text-ink">{folder.title}</h3>
@@ -52,7 +52,7 @@ export default async function FoldersPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="flex flex-col items-center justify-center py-12 text-center">
           <FolderOpen className="h-12 w-12 text-mid-gray" />
           <h3 className="mt-4 text-lg font-medium text-ink">Chưa có folder nào</h3>
           <p className="mt-1 text-sm text-mid-gray">Sắp xếp bộ thẻ vào folder để dễ quản lý.</p>

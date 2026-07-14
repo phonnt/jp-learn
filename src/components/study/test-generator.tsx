@@ -95,25 +95,25 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
     const percent = Math.round((correctCount / questions.length) * 100)
     return (
       <div className="mx-auto max-w-lg space-y-6 text-center">
-        <h2 className="text-heading-sm font-semibold text-ink">Bài kiểm tra hoàn thành!</h2>
+        <h2 className="text-heading-sm font-semibold text-charcoal">Bài kiểm tra hoàn thành!</h2>
         <Card>
-          <CardContent className="p-8">
-            <div className="text-5xl font-bold text-ink">{correctCount}/{questions.length}</div>
-            <p className="mt-2 text-lg text-mid-gray">{percent}% đúng</p>
+          <CardContent className="p-4">
+            <div className="text-5xl font-bold text-charcoal">{correctCount}/{questions.length}</div>
+            <p className="mt-2 text-lg text-fog">{percent}% đúng</p>
             <div className="mt-6 space-y-1 text-left">
               {questions.map((q, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm">
                   {answers[i] === q.correctAnswer ? (
-                    <Check className="h-4 w-4 shrink-0 text-green-600" />
+                    <Check className="h-5 w-5 shrink-0 text-green-600" />
                   ) : (
-                    <X className="h-4 w-4 shrink-0 text-ember" />
+                    <X className="h-5 w-5 shrink-0 text-ember" />
                   )}
-                  <span className="text-mid-gray">{q.term}</span>
+                  <span className="text-fog">{q.term}</span>
                 </div>
               ))}
             </div>
             <Button className="mt-6" onClick={() => { setCurrentIndex(0); setAnswers(Array(questions.length).fill(null)); setCompleted(false) }}>
-              <RotateCw className="mr-1 h-4 w-4" />
+              <RotateCw className="mr-1 h-5 w-5" />
               Làm lại
             </Button>
           </CardContent>
@@ -126,7 +126,7 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-between text-sm text-mid-gray">
+      <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {questions.length}</span>
         <Badge variant="secondary" className="text-xs">
           {current.type === 'multiple-choice' ? 'Chọn đáp án' : current.type === 'written' ? 'Tự luận' : 'Đúng/Sai'}
@@ -136,33 +136,33 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
       <Progress value={progress} className="h-1" />
 
       <Card>
-        <CardContent className="p-8">
-          <p className="mb-2 text-xs text-mid-gray">
+        <CardContent className="p-4">
+          <p className="mb-2 text-xs text-fog">
             {current.type === 'true-false'
               ? 'Câu sau đây đúng hay sai?'
               : current.type === 'written'
                 ? 'Gõ nghĩa của từ:'
                 : 'Chọn nghĩa đúng của:'}
           </p>
-          <p className="mb-6 text-2xl font-semibold text-ink">{current.term}</p>
+          <p className="mb-6 text-2xl font-semibold text-charcoal">{current.term}</p>
 
           {current.type === 'true-false' && (
-            <p className="mb-4 text-sm text-mid-gray italic">{current.definition}</p>
+            <p className="mb-4 text-sm text-fog italic">{current.definition}</p>
           )}
 
           {feedback !== null ? (
             <div className="space-y-4">
-              <div className={`rounded-lg border p-4 ${feedback ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>
+              <div className={`rounded-cards border border-ash p-4 ${feedback ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>
                 <p className={`text-sm font-medium ${feedback ? 'text-green-700' : 'text-ember'}`}>
                   {feedback ? 'Đúng!' : 'Sai!'}
                 </p>
-                <p className="mt-1 text-ink">
+                <p className="mt-1 text-charcoal">
                   Đáp án: <strong>{current.correctAnswer.toString()}</strong>
                 </p>
               </div>
               <Button className="w-full" onClick={handleNext}>
                 {currentIndex >= questions.length - 1 ? 'Xem kết quả' : 'Tiếp theo'}
-                <ArrowRight className="ml-1 h-4 w-4" />
+                <ArrowRight className="ml-1 h-5 w-5" />
               </Button>
             </div>
           ) : (
@@ -187,7 +187,7 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
                     autoFocus
                   />
                   <Button className="w-full" onClick={handleCheckWritten}>
-                    <Check className="mr-1 h-4 w-4" />
+                    <Check className="mr-1 h-5 w-5" />
                     Kiểm tra
                   </Button>
                 </div>
@@ -196,11 +196,11 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
               {current.type === 'true-false' && (
                 <div className="flex gap-3">
                   <Button variant="outline" className="flex-1" onClick={() => handleAnswer(true)}>
-                    <Check className="mr-1 h-4 w-4 text-green-600" />
+                    <Check className="mr-1 h-5 w-5 text-green-600" />
                     Đúng
                   </Button>
                   <Button variant="outline" className="flex-1" onClick={() => handleAnswer(false)}>
-                    <X className="mr-1 h-4 w-4 text-ember" />
+                    <X className="mr-1 h-5 w-5 text-ember" />
                     Sai
                   </Button>
                 </div>

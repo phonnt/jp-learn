@@ -28,7 +28,7 @@ export default async function ProfilePage() {
         <CardHeader className="flex flex-row items-center gap-4">
           <Avatar className="h-16 w-16">
             <AvatarImage src={profile?.avatar_url || user.user_metadata?.avatar_url} />
-            <AvatarFallback className="bg-ink text-paper text-lg">
+            <AvatarFallback className="bg-charcoal text-paper text-lg">
               {profile?.username?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>

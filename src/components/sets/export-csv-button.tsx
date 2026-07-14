@@ -30,7 +30,7 @@ export function ExportCsvButton({ setId }: ExportCsvButtonProps) {
 
   return (
     <Button variant="ghost" size="sm" onClick={handleExport}>
-      <Download className="mr-1 h-4 w-4" />
+      <Download className="mr-1 h-5 w-5" />
       Export CSV
     </Button>
   )

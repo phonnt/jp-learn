@@ -49,7 +49,7 @@ export function CommentSection({ setId }: CommentSectionProps) {
   return (
     <div className="space-y-4">
       <h3 className="flex items-center gap-2 text-sm font-medium text-ink">
-        <MessageSquare className="h-4 w-4" />
+        <MessageSquare className="h-5 w-5" />
         Bình luận ({comments.length})
       </h3>
 
@@ -61,7 +61,7 @@ export function CommentSection({ setId }: CommentSectionProps) {
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
         />
         <Button size="icon" onClick={handleSubmit} disabled={loading}>
-          <Send className="h-4 w-4" />
+          <Send className="h-5 w-5" />
         </Button>
       </div>
 
@@ -70,9 +70,9 @@ export function CommentSection({ setId }: CommentSectionProps) {
       ) : (
         <div className="space-y-3">
           {comments.map(c => (
-            <div key={c.id} className="flex gap-3 rounded-lg border border-hairline p-3">
+            <div key={c.id} className="flex gap-3 rounded-cards border border-ash p-3">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-ink text-paper text-xs">
+                <AvatarFallback className="bg-charcoal text-paper text-xs">
                   {c.users?.username?.charAt(0).toUpperCase() || '?'}
                 </AvatarFallback>
               </Avatar>

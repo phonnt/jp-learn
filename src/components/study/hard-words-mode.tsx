@@ -104,13 +104,13 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
     const total = results.length
     return (
       <div className="mx-auto max-w-lg space-y-6 text-center">
-        <h2 className="text-heading-sm font-semibold text-ink">Ôn tập hoàn thành!</h2>
+        <h2 className="text-heading-sm font-semibold text-charcoal">Ôn tập hoàn thành!</h2>
         <Card>
-          <CardContent className="p-8">
-            <div className="text-5xl font-bold text-ink">{correct}/{total}</div>
-            <p className="mt-2 text-mid-gray">{total > 0 ? Math.round((correct / total) * 100) : 0}% đúng</p>
+          <CardContent className="p-4">
+            <div className="text-5xl font-bold text-charcoal">{correct}/{total}</div>
+            <p className="mt-2 text-fog">{total > 0 ? Math.round((correct / total) * 100) : 0}% đúng</p>
             <Button className="mt-6" onClick={() => { setCompleted(false); setCurrentIndex(0); setResults([]); init() }}>
-              <RotateCw className="mr-1 h-4 w-4" />
+              <RotateCw className="mr-1 h-5 w-5" />
               Ôn lại
             </Button>
           </CardContent>
@@ -122,10 +122,10 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
   if (words.length === 0) {
     return (
       <Card>
-        <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
+        <CardContent className="flex flex-col items-center gap-4 p-4 text-center">
           <Check className="h-10 w-10 text-green-600" />
-          <h3 className="text-lg font-medium text-ink">Không có thẻ khó</h3>
-          <p className="text-sm text-mid-gray">Bạn đã trả lời đúng tất cả các thẻ gần đây!</p>
+          <h3 className="text-lg font-medium text-charcoal">Không có thẻ khó</h3>
+          <p className="text-sm text-fog">Bạn đã trả lời đúng tất cả các thẻ gần đây!</p>
         </CardContent>
       </Card>
     )
@@ -133,10 +133,10 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-between text-sm text-mid-gray">
+      <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {words.length}</span>
         <Badge variant="secondary" className="flex items-center gap-1 text-xs">
-          <AlertTriangle className="h-3 w-3" />
+          <AlertTriangle className="h-5 w-5" />
           Sai {current.wrongCount || '?'} lần
         </Badge>
       </div>
@@ -144,10 +144,10 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
       <Progress value={progress} className="h-1" />
 
       <Card>
-        <CardContent className="p-8 text-center">
-          <p className="mb-2 text-xs text-mid-gray">Ôn tập từ hay sai:</p>
-          <p className="text-2xl font-semibold text-ink">{current.term}</p>
-          {current.reading && <p className="mt-1 text-sm text-mid-gray">{current.reading}</p>}
+        <CardContent className="p-4 text-center">
+          <p className="mb-2 text-xs text-fog">Ôn tập từ hay sai:</p>
+          <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
+          {current.reading && <p className="mt-1 text-sm text-fog">{current.reading}</p>}
 
           {isCorrect === null ? (
             <div className="mt-6 space-y-3">
@@ -160,7 +160,7 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
               />
               <div className="flex gap-2">
                 <Button className="flex-1" onClick={handleCheck}>
-                  <Check className="mr-1 h-4 w-4" />
+                  <Check className="mr-1 h-5 w-5" />
                   Kiểm tra
                 </Button>
                 <Button variant="outline" onClick={() => handleIncorrect()}>
@@ -170,17 +170,17 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
             </div>
           ) : (
             <div className="mt-6 space-y-4">
-              <div className={`rounded-lg border p-4 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>
+              <div className={`rounded-cards border border-ash p-4 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>
                 <p className={`text-sm font-medium ${isCorrect ? 'text-green-700' : 'text-ember'}`}>
                   {isCorrect ? 'Đúng!' : 'Sai!'}
                 </p>
-                <p className="mt-1 text-ink">
+                <p className="mt-1 text-charcoal">
                   Đáp án: <strong>{current.definition}</strong>
                 </p>
               </div>
               <Button className="w-full" onClick={handleNext}>
                 {currentIndex >= words.length - 1 ? 'Kết thúc' : 'Tiếp theo'}
-                <ArrowRight className="ml-1 h-4 w-4" />
+                <ArrowRight className="ml-1 h-5 w-5" />
               </Button>
             </div>
           )}

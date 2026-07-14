@@ -33,13 +33,13 @@ export function BadgesPageClient({ badges, userBadges, xp }: BadgesPageClientPro
               key={badge.id}
               className={`transition-shadow ${earned ? '' : 'opacity-50'}`}
             >
-              <CardContent className="p-5">
+              <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <span className="text-3xl">{badge.icon}</span>
                   {earned ? (
                     <Badge variant="secondary" className="text-xs">Đã đạt</Badge>
                   ) : (
-                    <Lock className="h-4 w-4 text-mid-gray" />
+                    <Lock className="h-5 w-5 text-mid-gray" />
                   )}
                 </div>
                 <h3 className="mt-3 font-medium text-ink">{badge.name}</h3>
@@ -56,7 +56,7 @@ export function BadgesPageClient({ badges, userBadges, xp }: BadgesPageClientPro
       </div>
 
       {badges.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="flex flex-col items-center justify-center py-12 text-center">
           <p className="text-mid-gray">Đang cập nhật danh sách huy hiệu...</p>
         </div>
       )}

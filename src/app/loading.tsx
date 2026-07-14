@@ -8,11 +8,11 @@ export default function Loading() {
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-4 w-64" />
         </div>
-        <Skeleton className="h-9 w-28 rounded-2xl" />
+        <Skeleton className="h-9 w-28 rounded-cards" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="rounded-3xl border border-hairline bg-paper p-5">
+          <div key={i} className="rounded-cards border border-ash bg-paper-mist p-4">
             <Skeleton className="h-5 w-3/4" />
             <Skeleton className="mt-2 h-4 w-full" />
             <Skeleton className="mt-3 h-3 w-1/3" />

@@ -41,9 +41,9 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
           <div className="flex items-center gap-2">
             <h1 className="text-heading-sm font-semibold text-ink">{set.title}</h1>
             {set.is_public ? (
-              <Globe className="h-4 w-4 text-mid-gray" />
+              <Globe className="h-5 w-5 text-mid-gray" />
             ) : (
-              <Lock className="h-4 w-4 text-mid-gray" />
+              <Lock className="h-5 w-5 text-mid-gray" />
             )}
           </div>
           {set.description && (
@@ -66,19 +66,19 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
               <CollaboratorDialog setId={set.id} isOwner={isOwner} />
               <Button variant="ghost" size="sm" asChild>
                 <Link href={`/sets/${set.id}/edit`}>
-                  <Pencil className="mr-1 h-4 w-4" />
+                  <Pencil className="mr-1 h-5 w-5" />
                   Sửa
                 </Link>
               </Button>
               <Button variant="ghost" size="sm" onClick={() => deleteSet(set.id)}>
-                <Trash2 className="mr-1 h-4 w-4 text-ember" />
+                <Trash2 className="mr-1 h-5 w-5 text-ember" />
                 Xoá
               </Button>
             </>
           )}
           <ExportCsvButton setId={set.id} />
           <Button variant="ghost" size="sm" onClick={() => cloneSet(set.id)}>
-            <Copy className="mr-1 h-4 w-4" />
+            <Copy className="mr-1 h-5 w-5" />
             Sao chép
           </Button>
         </div>
@@ -87,43 +87,43 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
       <div className="flex flex-wrap gap-3">
         <Button asChild>
           <Link href={`/sets/${set.id}/flashcard`}>
-            <Play className="mr-1 h-4 w-4" />
+            <Play className="mr-1 h-5 w-5" />
             Học flashcard
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href={`/sets/${set.id}/learn`}>
-            <BookOpen className="mr-1 h-4 w-4" />
+            <BookOpen className="mr-1 h-5 w-5" />
             Học
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href={`/sets/${set.id}/quiz`}>
-            <FileText className="mr-1 h-4 w-4" />
+            <FileText className="mr-1 h-5 w-5" />
             Quiz
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href={`/sets/${set.id}/spell`}>
-            <Ear className="mr-1 h-4 w-4" />
+            <Ear className="mr-1 h-5 w-5" />
             Spell
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href={`/sets/${set.id}/test`}>
-            <ListChecks className="mr-1 h-4 w-4" />
+            <ListChecks className="mr-1 h-5 w-5" />
             Test
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href={`/sets/${set.id}/match`}>
-            <Grid3X3 className="mr-1 h-4 w-4" />
+            <Grid3X3 className="mr-1 h-5 w-5" />
             Match
           </Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href={`/sets/${set.id}/hard-words`}>
-            <AlertTriangle className="mr-1 h-4 w-4" />
+            <AlertTriangle className="mr-1 h-5 w-5" />
             Thẻ khó
           </Link>
         </Button>
@@ -131,7 +131,7 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
 
       <div className="space-y-2">
         <h2 className="text-sm font-medium text-ink">Danh sách thuật ngữ</h2>
-        <div className="divide-y divide-hairline rounded-xl border border-hairline bg-paper">
+        <div className="divide-y divide-hairline rounded-cards border border-ash bg-paper-mist">
           {terms.map((term, index) => (
             <div key={term.id} className="flex items-center gap-4 p-4">
               <span className="w-6 text-sm text-mid-gray">{index + 1}</span>

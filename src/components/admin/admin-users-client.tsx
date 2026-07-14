@@ -31,7 +31,7 @@ export function AdminUsersClient({ users }: AdminUsersClientProps) {
   return (
     <div className="space-y-4">
       <h1 className="text-heading-sm font-semibold text-ink">Quản lý người dùng</h1>
-      <div className="rounded-xl border border-hairline bg-paper">
+      <div className="rounded-cards border border-ash bg-paper-mist">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-hairline text-left text-mid-gray">

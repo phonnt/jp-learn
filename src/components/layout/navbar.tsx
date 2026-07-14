@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { LayoutDashboard, LogOut, Plus, User, Target, Award, Settings } from 'lucide-react'
+import { LayoutDashboard, LogOut, Plus, User, Target, Award, Settings, Search } from 'lucide-react'
 
 export function Navbar() {
   const router = useRouter()
@@ -21,20 +21,20 @@ export function Navbar() {
   const user = session?.user
 
   return (
-    <header className="sticky top-0 z-50 border-b border-hairline bg-paper/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-ash bg-canvas-white/95 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-lg font-semibold tracking-tight text-ink">
+          <Link href="/" className="text-lg font-semibold tracking-tight text-charcoal">
             JP-Learn
           </Link>
-          <nav className="hidden items-center gap-4 md:flex">
-            <Link href="/sets" className="text-sm text-mid-gray transition-colors hover:text-ink">
-              Khám phá
-            </Link>
+          <nav className="hidden items-center gap-1 md:flex">
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/sets">Khám phá</Link>
+            </Button>
             {user && (
-              <Link href="/sets/my" className="text-sm text-mid-gray transition-colors hover:text-ink">
-                Bộ thẻ của tôi
-              </Link>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/sets/my">Bộ thẻ của tôi</Link>
+              </Button>
             )}
           </nav>
         </div>
@@ -44,7 +44,7 @@ export function Navbar() {
             <>
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/sets/new">
-                  <Plus className="mr-1 h-4 w-4" />
+                  <Plus className="mr-1 h-5 w-5" />
                   Tạo set
                 </Link>
               </Button>
@@ -52,35 +52,35 @@ export function Navbar() {
                 <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-full outline-none">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user.user_metadata?.avatar_url} />
-                    <AvatarFallback className="bg-ink text-paper text-xs">
+                    <AvatarFallback className="bg-charcoal text-canvas-white text-xs">
                       {user.email?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48" align="end">
                   <DropdownMenuItem onClick={() => router.push('/dashboard')}>
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <LayoutDashboard className="mr-2 h-5 w-5" />
                     Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/goals')}>
-                    <Target className="mr-2 h-4 w-4" />
+                    <Target className="mr-2 h-5 w-5" />
                     Mục tiêu
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/badges')}>
-                    <Award className="mr-2 h-4 w-4" />
+                    <Award className="mr-2 h-5 w-5" />
                     Thành tích
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/profile')}>
-                    <User className="mr-2 h-4 w-4" />
+                    <User className="mr-2 h-5 w-5" />
                     Hồ sơ
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/settings')}>
-                    <Settings className="mr-2 h-4 w-4" />
+                    <Settings className="mr-2 h-5 w-5" />
                     Cài đặt
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signOut()}>
-                    <LogOut className="mr-2 h-4 w-4" />
+                    <LogOut className="mr-2 h-5 w-5" />
                     Đăng xuất
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -88,10 +88,10 @@ export function Navbar() {
             </>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="outline" size="sm" asChild>
                 <Link href="/auth/login">Đăng nhập</Link>
               </Button>
-              <Button size="sm" asChild>
+              <Button size="sm" asChild className="bg-primary-action-fill text-canvas-white hover:opacity-90">
                 <Link href="/auth/register">Đăng ký</Link>
               </Button>
             </div>

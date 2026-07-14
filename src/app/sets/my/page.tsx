@@ -27,7 +27,7 @@ export default async function MySetsPage() {
         </div>
         <Button asChild>
           <Link href="/sets/new">
-            <Plus className="mr-1 h-4 w-4" />
+            <Plus className="mr-1 h-5 w-5" />
             Tạo set
           </Link>
         </Button>
@@ -40,7 +40,7 @@ export default async function MySetsPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="flex flex-col items-center justify-center py-12 text-center">
           <BookOpen className="h-12 w-12 text-mid-gray" />
           <h3 className="mt-4 text-lg font-medium text-ink">Chưa có bộ thẻ nào</h3>
           <p className="mt-1 text-sm text-mid-gray">Tạo bộ thẻ đầu tiên của bạn!</p>

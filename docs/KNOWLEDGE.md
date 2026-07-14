@@ -107,3 +107,31 @@
 - Daily goals: `actions/goals.ts` (get/set daily goal, weekly progress), `components/dashboard/goals-page.tsx` (UI mục tiêu + thanh tiến độ + calendar tuần), route `/goals`
 - Thêm link Hard words + Export CSV vào set-detail, link Goals vào navbar dropdown
 - Tổng số: 76 file TypeScript, build pass
+
+## 2026-07-14 — Dub Design System migration
+
+- Thay toàn bộ design tokens từ custom JP-Learn → Dub design system (editorial SaaS, border-first, monochrome + blue accent)
+- globals.css: colors (canvas=#ffffff, paper=#f5f5f5, charcoal=#171717), typography (Inter body, Satoshi display), radius (tags=9999px, cards=12px, inputs=6px, buttons=8px), shadows (Dub's border-first philosophy), thêm Dub color tokens (electric-blue, deep-sapphire, soft-mint, vivid-green, tangerine, lavender)
+- Card: bỏ shadow-subtle, chuyển sang border-first (#e5e5e5), dùng border-ash
+- Button: dùng rounded-buttons (8px), primary CTA dùng rounded-tags (9999px) + bg-primary-action-fill
+- Badge: radius 9999px từ rounded-badges → rounded-tags
+- Navbar: Dub ghost style buttons (rounded-tags hover), primary CTA đăng ký pill-shaped
+- Landing page: canva trắng (#ffffff), section alt dùng bg-paper-mist (#f5f5f5), heading weight 500 (medium), text charcoal
+- Auth pages: fix min-h-screen scrollbar (h-full), bg-paper-mist cho section nền, aria-invalid trên inputs
+- Browse sets + SetCard: tokens mới, body-lg/fog cho text
+- Mobile bottom nav: tokens mới (border-ash, text-charcoal, text-fog)
+- CONVENTIONS.md: section 5 update với Dub design tokens (colors, radii, typography)
+- Deprecated tokens kept for backward compat (bg-canvas=#ffffff, text-ink=#171717, border-hairline=#e5e5e5, text-mid-gray=#737373)
+
+## 2026-07-14 — Dub Design audit & Button/Icon alignment
+
+- Button audit toàn diện: check tất cả buttons trên landing, auth, browse sets
+- `--color-primary-action-fill: #000000` → `#2563eb` → `#000000` (fix sai màu xanh, revert về đen)
+- Ghost variant: xoá `rounded-tags`, giờ dùng `rounded-buttons` (8px) — tất cả buttons đồng bộ 8px
+- Thêm `cursor-pointer` vào button base class
+- Nav "Đăng nhập": ghost → outline variant (white bg + #e5e5e5 border)
+- DESIGN.md line 287: primary action button sửa 9999px → 8px, bỏ "compact pill padding"
+- Icon sizing: `h-4 w-4` → `h-5 w-5` (16px → 20px) qua 40+ file, button base SVG default `size-4` → `size-5`
+- Dọn sạch icon nhỏ residual: `h-3 w-3` → `h-5 w-5` ở flashcard, spell-mode, term-editor, set-card, hard-words-mode
+- Xoá `--spacing-*` overrides sai (4–112px) — phá hỏng Tailwind v4 spacing scale (h-12 thành 12px thay vì 48px)
+- Auth page whitespace: `h-full` → `min-h-[calc(100dvh-3.5rem)]` (fill viewport trừ navbar)

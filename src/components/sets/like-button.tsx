@@ -39,7 +39,7 @@ export function LikeButton({ setId }: LikeButtonProps) {
 
   return (
     <Button variant="ghost" size="sm" onClick={handleToggle} disabled={loading}>
-      <Heart className={`mr-1 h-4 w-4 ${liked ? 'fill-ember text-ember' : ''}`} />
+      <Heart className={`mr-1 h-5 w-5 ${liked ? 'fill-ember text-ember' : ''}`} />
       {count}
     </Button>
   )

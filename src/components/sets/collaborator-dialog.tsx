@@ -86,7 +86,7 @@ export function CollaboratorDialog({ setId, isOwner }: CollaboratorDialogProps) 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button variant="outline" size="sm" disabled={!isOwner} onClick={() => setOpen(true)}>
-        <Users className="mr-1 h-4 w-4" />
+        <Users className="mr-1 h-5 w-5" />
         Cộng tác
       </Button>
       <DialogContent>
@@ -100,7 +100,7 @@ export function CollaboratorDialog({ setId, isOwner }: CollaboratorDialogProps) 
         {isOwner && (
           <div className="flex items-end gap-2">
             <div className="flex-1 space-y-1.5">
-              <Label className="text-xs text-mid-gray">Tên người dùng</Label>
+              <Label className="text-xs text-mid-gray" required>Tên người dùng</Label>
               <Input
                 placeholder="username"
                 value={email}
@@ -120,7 +120,7 @@ export function CollaboratorDialog({ setId, isOwner }: CollaboratorDialogProps) 
               </Select>
             </div>
             <Button onClick={handleAdd} disabled={loading}>
-              <UserPlus className="h-4 w-4" />
+              <UserPlus className="h-5 w-5" />
             </Button>
           </div>
         )}
@@ -130,7 +130,7 @@ export function CollaboratorDialog({ setId, isOwner }: CollaboratorDialogProps) 
             <p className="py-4 text-center text-sm text-mid-gray">Chưa có cộng tác viên</p>
           ) : (
             collaborators.map((c) => (
-              <div key={c.id} className="flex items-center justify-between rounded-lg border border-hairline p-3">
+              <div key={c.id} className="flex items-center justify-between rounded-cards border border-ash p-3">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-ink text-paper text-xs">
@@ -159,7 +159,7 @@ export function CollaboratorDialog({ setId, isOwner }: CollaboratorDialogProps) 
                       </SelectContent>
                     </Select>
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleRemove(c.id)}>
-                      <Trash2 className="h-4 w-4 text-ember" />
+                      <Trash2 className="h-5 w-5 text-ember" />
                     </Button>
                   </div>
                 )}

@@ -67,9 +67,9 @@ export function SetEditor() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <Card>
-        <CardContent className="space-y-4 p-5">
+        <CardContent className="space-y-4 p-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Tiêu đề *</Label>
+            <Label htmlFor="title" required>Tiêu đề</Label>
             <Input id="title" placeholder="VD: Từ vựng JLPT N5 - Bài 1" {...register('title')} />
             {errors.title && <p className="text-sm text-ember">{errors.title.message as string}</p>}
           </div>
@@ -92,7 +92,7 @@ export function SetEditor() {
 
       <div className="flex gap-3">
         <Button type="submit" disabled={loading}>
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tạo bộ thẻ'}
+          {loading ? <Loader2 className=" h-5 w-5 animate-spin" /> : 'Tạo bộ thẻ'}
         </Button>
         <Button type="button" variant="ghost" onClick={() => router.back()}>
           Huỷ

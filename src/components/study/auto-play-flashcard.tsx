@@ -69,7 +69,7 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-center gap-4 text-sm text-mid-gray">
+      <div className="flex items-center justify-center gap-4 text-sm text-fog">
         <Button variant="ghost" size="sm" onClick={() => setIntervalSec(Math.max(2, intervalSec - 1))}>
           -1s
         </Button>
@@ -79,7 +79,7 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
         </Button>
       </div>
 
-      <div className="flex items-center justify-between text-sm text-mid-gray">
+      <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {shuffled.length}</span>
         <span>{flipped ? 'Đã lật' : 'Chưa lật'}</span>
       </div>
@@ -90,21 +90,21 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
         className="min-h-[260px] cursor-pointer transition-all hover:shadow-md"
         onClick={() => setFlipped(!flipped)}
       >
-        <CardContent className="flex h-[260px] flex-col items-center justify-center p-8 text-center">
+        <CardContent className="flex h-[260px] flex-col items-center justify-center p-4 text-center">
           {flipped ? (
             <>
-              <p className="text-lg font-medium text-ink">{current.definition}</p>
-              {current.reading && <p className="mt-2 text-sm text-mid-gray">{current.reading}</p>}
+              <p className="text-lg font-medium text-charcoal">{current.definition}</p>
+              {current.reading && <p className="mt-2 text-sm text-fog">{current.reading}</p>}
             </>
           ) : (
-            <p className="text-2xl font-semibold text-ink">{current.term}</p>
+            <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
           )}
         </CardContent>
       </Card>
 
       <div className="flex items-center justify-center gap-4">
         <Button variant="ghost" size="icon" onClick={goPrev}>
-          <SkipBack className="h-4 w-4" />
+          <SkipBack className="h-5 w-5" />
         </Button>
         <Button
           variant="outline"
@@ -115,13 +115,13 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
           {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}
         </Button>
         <Button variant="ghost" size="icon" onClick={goNext}>
-          <SkipForward className="h-4 w-4" />
+          <SkipForward className="h-5 w-5" />
         </Button>
       </div>
 
       <div className="flex justify-center">
         <Button variant="outline" size="sm" onClick={() => { setShuffled([...shuffled].sort(() => Math.random() - 0.5)); setCurrentIndex(0); stop() }}>
-          <RotateCw className="mr-1 h-4 w-4" />
+          <RotateCw className="mr-1 h-5 w-5" />
           Xáo trộn
         </Button>
       </div>

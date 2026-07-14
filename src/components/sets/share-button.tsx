@@ -22,7 +22,7 @@ export function ShareButton({ setId }: ShareButtonProps) {
 
   return (
     <Button variant="ghost" size="sm" onClick={handleShare}>
-      {copied ? <Check className="mr-1 h-4 w-4" /> : <Share2 className="mr-1 h-4 w-4" />}
+      {copied ? <Check className="mr-1 h-5 w-5" /> : <Share2 className="mr-1 h-5 w-5" />}
       {copied ? 'Đã copy' : 'Chia sẻ'}
     </Button>
   )

@@ -28,7 +28,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-mid-gray">Người dùng</CardTitle>
-            <Users className="h-4 w-4 text-mid-gray" />
+            <Users className="h-5 w-5 text-mid-gray" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold">{userCount || 0}</div>
@@ -37,7 +37,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-mid-gray">Bộ thẻ</CardTitle>
-            <BookOpen className="h-4 w-4 text-mid-gray" />
+            <BookOpen className="h-5 w-5 text-mid-gray" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold">{setCount || 0}</div>
@@ -46,7 +46,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-mid-gray">Báo cáo chờ xử lý</CardTitle>
-            <Flag className="h-4 w-4 text-mid-gray" />
+            <Flag className="h-5 w-5 text-mid-gray" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-semibold">{reportCount || 0}</div>

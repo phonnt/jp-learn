@@ -34,10 +34,10 @@ export default function NewFolderPage() {
     <div className="mx-auto max-w-lg space-y-6 p-6">
       <h1 className="text-heading-sm font-semibold text-ink">Tạo folder mới</h1>
       <Card>
-        <CardContent className="p-5">
+        <CardContent className="p-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Tên folder *</Label>
+              <Label htmlFor="title" required>Tên folder</Label>
               <Input id="title" placeholder="VD: JLPT N5" {...register('title')} />
               {errors.title && <p className="text-sm text-ember">{errors.title.message as string}</p>}
             </div>
@@ -46,7 +46,7 @@ export default function NewFolderPage() {
               <Input id="description" placeholder="..." {...register('description')} />
             </div>
             <Button type="submit" disabled={loading}>
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tạo folder'}
+              {loading ? <Loader2 className=" h-5 w-5 animate-spin" /> : 'Tạo folder'}
             </Button>
           </form>
         </CardContent>

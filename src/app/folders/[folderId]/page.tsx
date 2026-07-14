@@ -54,7 +54,7 @@ export default async function FolderDetailPage({ params }: { params: Promise<{ f
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="flex flex-col items-center justify-center py-12 text-center">
           <p className="text-mid-gray">Folder chưa có bộ thẻ nào. Thêm từ trang chi tiết bộ thẻ.</p>
         </div>
       )}

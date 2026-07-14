@@ -93,66 +93,8 @@ components/sets/
 
 - Dùng `cn()` từ `@/lib/utils` cho conditional classes
 - **PHẢI** dùng design tokens từ `docs/DESIGN.md` — không dùng inline colors, không dùng shadcn vars trực tiếp
-
-### 5.1 Design Tokens — Color Classes
-
-| Token | Class | Dùng cho |
-|-------|-------|----------|
-| `#f5f5f5` | `bg-canvas` | Page background |
-| `#ffffff` | `bg-paper` | Card surfaces, popovers |
-| `#fafafa` | `bg-surface-alt` | Sidebar, subtle variant |
-| `#0a0a0a` | `text-ink`, `bg-ink` | Primary text, filled buttons |
-| `#171717` | `text-ink-soft`, `bg-ink-soft` | Filled button bg, secondary text |
-| `#737373` | `text-mid-gray` | Muted text, placeholder, labels |
-| `#e5e5e5` | `border-hairline` | Borders, card edges, inputs |
-| `#e7000b` | `text-ember` | Destructive/error only |
-
-```typescript
-// ✅ Đúng — dùng design tokens
-<div className="bg-canvas text-ink border-hairline" />
-<Button className="bg-ink text-paper" />
-
-// ❌ Sai — dùng màu cứng hoặc shadcn vars
-<div className="bg-[#f5f5f5] text-[#0a0a0a]" />
-<div className="bg-background text-foreground" />
-```
-
-### 5.2 Design Tokens — Border Radius
-
-| Token | Value | Class | Dùng cho |
-|-------|-------|-------|----------|
-| `--radius-small` | 6px | `rounded-sm` | Small elements |
-| `--radius-nested` | 10px | `rounded-md` | Nested cards |
-| `--radius-buttons` | 18px | `rounded-xl` | Buttons, inputs, badges |
-| `--radius-cards` | 24px | `rounded-2xl` | Card containers |
-
-```typescript
-// ✅ Đúng
-<Card className="rounded-2xl" />  // cards = 24px
-<Button className="rounded-xl" /> // buttons = 18px
-<Input className="rounded-xl" />  // inputs = 18px
-
-// ❌ Không nhất quán
-<Card className="rounded-lg" />
-<Button className="rounded-2xl" />
-```
-
-### 5.3 Shadows
-
-```typescript
-// ✅ Card shadow
-<Card className="shadow-subtle" />
-```
-
-### 5.4 Typography Scale
-
-| Token | Class | Size/Weight |
-|-------|-------|-------------|
-| `--text-caption` | `text-caption` | 12px |
-| `--text-body` | `text-body` | 14px/400 |
-| `--text-heading-sm` | `text-heading-sm` | 24px/600 |
-| `--text-heading` | `text-heading` | 30px/600 |
-| `--text-display` | `text-display` | 48px/600 |
+- Tham khảo `docs/DESIGN.md` cho: color tokens, radius scale, typography scale, spacing, shadows
+- Radius scale: tags=9999px, cards=12px, inputs=6px, buttons=8px, largeCards=16px
 
 ### 5.5 shadcn/ui components
 

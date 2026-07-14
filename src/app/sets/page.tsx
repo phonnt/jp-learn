@@ -29,12 +29,12 @@ export default async function BrowseSetsPage({
   return (
     <div className="mx-auto max-w-screen-xl space-y-6 p-6">
       <div>
-        <h1 className="text-heading-sm font-semibold text-ink">Khám phá</h1>
-        <p className="text-mid-gray">Các bộ thẻ công khai từ cộng đồng</p>
+        <h1 className="text-heading-sm font-medium text-charcoal">Khám phá</h1>
+        <p className="text-fog text-body">Các bộ thẻ công khai từ cộng đồng</p>
       </div>
 
       <form className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mid-gray" />
+        <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-fog" />
         <Input
           name="q"
           placeholder="Tìm kiếm bộ thẻ..."
@@ -51,11 +51,11 @@ export default async function BrowseSetsPage({
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <BookOpen className="h-12 w-12 text-mid-gray" />
-          <h3 className="mt-4 text-lg font-medium text-ink">
+          <BookOpen className="h-12 w-12 text-fog" />
+          <h3 className="mt-4 text-subheading font-medium text-charcoal">
             {q ? 'Không tìm thấy kết quả' : 'Chưa có bộ thẻ nào'}
           </h3>
-          <p className="mt-1 text-sm text-mid-gray">
+          <p className="mt-1 text-body text-fog">
             {q ? 'Thử tìm kiếm với từ khoá khác' : 'Hãy là người đầu tiên tạo bộ thẻ!'}
           </p>
         </div>

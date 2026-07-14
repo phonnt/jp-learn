@@ -54,7 +54,7 @@ export function GoalsPage({ goal, progress, xp }: GoalsPageProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm font-medium">
-            <Target className="h-4 w-4 text-mid-gray" />
+            <Target className="h-5 w-5 text-mid-gray" />
             Mục tiêu hằng ngày
           </CardTitle>
         </CardHeader>
@@ -75,7 +75,7 @@ export function GoalsPage({ goal, progress, xp }: GoalsPageProps) {
             <Label htmlFor="reminder" className="text-sm text-mid-gray">Gửi thông báo nhắc học</Label>
           </div>
           <Button onClick={handleSave} disabled={loading}>
-            <Check className="mr-1 h-4 w-4" />
+            <Check className="mr-1 h-5 w-5" />
             Lưu
           </Button>
         </CardContent>
@@ -84,7 +84,7 @@ export function GoalsPage({ goal, progress, xp }: GoalsPageProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm font-medium">
-            <Flame className="h-4 w-4 text-mid-gray" />
+            <Flame className="h-5 w-5 text-mid-gray" />
             Hôm nay
           </CardTitle>
         </CardHeader>
@@ -101,7 +101,7 @@ export function GoalsPage({ goal, progress, xp }: GoalsPageProps) {
           </div>
           <div className="mt-3 h-2 rounded-full bg-canvas">
             <div
-              className="h-full rounded-full bg-ink transition-all"
+              className="h-full rounded-full bg-charcoal transition-all"
               style={{ width: `${percent}%` }}
             />
           </div>
@@ -111,7 +111,7 @@ export function GoalsPage({ goal, progress, xp }: GoalsPageProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm font-medium">
-            <Zap className="h-4 w-4 text-mid-gray" />
+            <Zap className="h-5 w-5 text-mid-gray" />
             Tuần này
           </CardTitle>
         </CardHeader>
@@ -139,7 +139,7 @@ export function GoalsPage({ goal, progress, xp }: GoalsPageProps) {
                       studied > 0
                         ? studied >= dailyGoal
                           ? 'bg-green-100 text-green-700'
-                          : 'bg-ink/10 text-ink'
+                          : 'bg-charcoal/10 text-ink'
                         : 'bg-canvas text-mid-gray'
                     }`}
                   >

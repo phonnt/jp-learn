@@ -36,7 +36,7 @@ export function Flashcard({ terms }: FlashcardProps) {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <div className="flex items-center justify-between text-sm text-mid-gray">
+      <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {cards.length}</span>
         <span>{flipped ? 'Đang xem nghĩa' : 'Đang xem từ'}</span>
       </div>
@@ -47,23 +47,23 @@ export function Flashcard({ terms }: FlashcardProps) {
         className="min-h-[280px] cursor-pointer select-none transition-all hover:shadow-md"
         onClick={flip}
       >
-        <CardContent className="flex h-[280px] flex-col items-center justify-center p-8 text-center">
+        <CardContent className="flex h-[280px] flex-col items-center justify-center p-4 text-center">
           {flipped ? (
             <>
-              <p className="text-lg font-medium text-ink">{current.definition}</p>
+              <p className="text-lg font-medium text-charcoal">{current.definition}</p>
               {current.reading && (
-                <p className="mt-4 text-sm text-mid-gray">Cách đọc: {current.reading}</p>
+                <p className="mt-4 text-sm text-fog">Cách đọc: {current.reading}</p>
               )}
-              <Button variant="ghost" size="sm" className="mt-4 text-xs text-mid-gray" onClick={(e) => { e.stopPropagation(); flip() }}>
-                <RotateCw className="mr-1 h-3 w-3" />
+              <Button variant="ghost" size="sm" className="mt-4 text-xs text-fog" onClick={(e) => { e.stopPropagation(); flip() }}>
+                <RotateCw className="mr-1 h-5 w-5" />
                 Lật lại
               </Button>
             </>
           ) : (
             <>
-              <p className="text-2xl font-semibold text-ink">{current.term}</p>
-              <Button variant="ghost" size="sm" className="mt-6 text-xs text-mid-gray" onClick={(e) => { e.stopPropagation(); flip() }}>
-                <RotateCw className="mr-1 h-3 w-3" />
+              <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
+              <Button variant="ghost" size="sm" className="mt-6 text-xs text-fog" onClick={(e) => { e.stopPropagation(); flip() }}>
+                <RotateCw className="mr-1 h-5 w-5" />
                 Lật để xem nghĩa
               </Button>
             </>
@@ -73,20 +73,20 @@ export function Flashcard({ terms }: FlashcardProps) {
 
       <div className="flex items-center justify-center gap-4">
         <Button variant="outline" size="icon" onClick={prev} disabled={currentIndex === 0}>
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-5 w-5" />
         </Button>
         <Button variant="outline" size="icon" onClick={shuffle}>
-          <Shuffle className="h-4 w-4" />
+          <Shuffle className="h-5 w-5" />
         </Button>
         <Button variant="outline" size="icon" onClick={reset}>
-          <Check className="h-4 w-4" />
+          <Check className="h-5 w-5" />
         </Button>
         <Button variant="outline" size="icon" onClick={next} disabled={currentIndex === cards.length - 1}>
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-5 w-5" />
         </Button>
       </div>
 
-      <p className="text-center text-xs text-mid-gray">
+      <p className="text-center text-xs text-fog">
         Phím tắt: ← → để chuyển, Space để lật, F để lật
       </p>
     </div>

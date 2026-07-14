@@ -51,23 +51,23 @@ export function RegisterForm() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">Tên</Label>
-            <Input id="username" placeholder="yourname" {...register('username')} />
+            <Label htmlFor="username" required>Tên</Label>
+            <Input id="username" placeholder="yourname" {...register('username')} aria-invalid={errors.username ? 'true' : undefined} />
             {errors.username && <p className="text-sm text-ember">{errors.username.message as string}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" {...register('email')} />
+            <Label htmlFor="email" required>Email</Label>
+            <Input id="email" type="email" placeholder="you@example.com" {...register('email')} aria-invalid={errors.email ? 'true' : undefined} />
             {errors.email && <p className="text-sm text-ember">{errors.email.message as string}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Mật khẩu</Label>
-            <Input id="password" type="password" placeholder="••••••••" {...register('password')} />
+            <Label htmlFor="password" required>Mật khẩu</Label>
+            <Input id="password" type="password" placeholder="••••••••" {...register('password')} aria-invalid={errors.password ? 'true' : undefined} />
             {errors.password && <p className="text-sm text-ember">{errors.password.message as string}</p>}
           </div>
           {error && <p className="text-sm text-ember">{error}</p>}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Đăng ký'}
+            {loading ? <Loader2 className=" h-5 w-5 animate-spin" /> : 'Đăng ký'}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-mid-gray">

@@ -45,7 +45,7 @@ export function TermEditor({ terms, onChange }: TermEditorProps) {
           <CardContent className="p-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label className="text-xs text-mid-gray">Thuật ngữ (tiếng Nhật)</Label>
+                <Label className="text-xs text-mid-gray" required>Thuật ngữ (tiếng Nhật)</Label>
                 <Input
                   placeholder="例: 勉強"
                   value={entry.term}
@@ -54,7 +54,7 @@ export function TermEditor({ terms, onChange }: TermEditorProps) {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-xs text-mid-gray">Nghĩa (tiếng Việt)</Label>
+                <Label className="text-xs text-mid-gray" required>Nghĩa (tiếng Việt)</Label>
                 <Input
                   placeholder="vd: học tập"
                   value={entry.definition}
@@ -86,14 +86,14 @@ export function TermEditor({ terms, onChange }: TermEditorProps) {
               className="absolute right-2 top-2 h-6 w-6 text-mid-gray hover:text-ember"
               onClick={() => removeTerm(index)}
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="h-5 w-5" />
             </Button>
           )}
         </Card>
       ))}
 
       <Button variant="outline" className="w-full" onClick={addTerm}>
-        <Plus className="mr-1 h-4 w-4" />
+        <Plus className="mr-1 h-5 w-5" />
         Thêm thẻ
       </Button>
     </div>

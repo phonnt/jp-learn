@@ -49,7 +49,7 @@ export function ImportCsvDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button variant="outline" onClick={() => setOpen(true)}>
-        <Upload className="mr-1 h-4 w-4" />
+        <Upload className="mr-1 h-5 w-5" />
         Import CSV
       </Button>
       <DialogContent>
@@ -62,13 +62,13 @@ export function ImportCsvDialog() {
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Tiêu đề</Label>
+            <Label required>Tiêu đề</Label>
             <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tên bộ thẻ" />
           </div>
           <div className="space-y-1.5">
-            <Label>Nội dung CSV</Label>
+            <Label required>Nội dung CSV</Label>
             <textarea
-              className="min-h-[200px] w-full rounded-2xl border border-hairline bg-canvas p-3 text-sm text-ink outline-none focus:ring-1 focus:ring-hairline"
+              className="min-h-[200px] w-full rounded-cards border border-ash bg-canvas p-3 text-sm text-ink outline-none focus:ring-1 focus:ring-hairline"
               value={csv}
               onChange={(e) => setCsv(e.target.value)}
               placeholder="勉強,học tập,べんきょう,日本語を勉強します"
@@ -79,7 +79,7 @@ export function ImportCsvDialog() {
             <Label htmlFor="csv-public" className="text-sm text-mid-gray">Công khai</Label>
           </div>
           <Button onClick={handleImport} disabled={loading} className="w-full">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Import'}
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Import'}
           </Button>
         </div>
       </DialogContent>

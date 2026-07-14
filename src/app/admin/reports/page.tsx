@@ -55,11 +55,11 @@ export default function AdminReportsPage() {
                 </div>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="sm" onClick={() => handleResolve(r.id, 'delete_set')}>
-                    <Trash2 className="mr-1 h-4 w-4 text-ember" />
+                    <Trash2 className="mr-1 h-5 w-5 text-ember" />
                     Xoá set
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => handleResolve(r.id, 'dismiss')}>
-                    <X className="mr-1 h-4 w-4" />
+                    <X className="mr-1 h-5 w-5" />
                     Bỏ qua
                   </Button>
                 </div>
@@ -70,7 +70,7 @@ export default function AdminReportsPage() {
       )}
 
       {reports.filter(r => r.status !== 'pending').length > 0 && (
-        <details className="rounded-xl border border-hairline p-4">
+        <details className="rounded-cards border border-ash p-4">
           <summary className="cursor-pointer text-sm font-medium text-mid-gray">
             Đã xử lý ({reports.filter(r => r.status !== 'pending').length})
           </summary>
