@@ -8,6 +8,9 @@ import { deleteSet, cloneSet } from '@/actions/sets'
 import { CollaboratorDialog } from './collaborator-dialog'
 import { ImportCsvDialog } from './import-csv-dialog'
 import { ExportCsvButton } from './export-csv-button'
+import { LikeButton } from './like-button'
+import { CommentSection } from './comment-section'
+import { ShareButton } from './share-button'
 import {
   BookOpen,
   FileText,
@@ -58,6 +61,8 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
         </div>
 
         <div className="flex items-center gap-2">
+          <LikeButton setId={set.id} />
+          <ShareButton setId={set.id} />
           {isOwner && (
             <>
               <ImportCsvDialog />
@@ -146,6 +151,8 @@ export function SetDetail({ set, terms, isOwner }: SetDetailProps) {
           ))}
         </div>
       </div>
+
+      <CommentSection setId={set.id} />
     </div>
   )
 }

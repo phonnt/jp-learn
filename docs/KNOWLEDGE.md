@@ -52,7 +52,24 @@
 - Badges system: `lib/badges.ts` (12 badges definitions, check logic), `actions/badges.ts` (server-side checkAndAwardBadges), `components/dashboard/badges-page-client.tsx` (grid badges earned/locked), route `/badges`
 - Tích hợp badge check vào `saveStudyResults` — tự động kiểm tra và award sau mỗi buổi học
 - Thêm link Spell, Test, Auto-play, Match, Hard words, Badges vào set-detail + navbar
-- Tổng số ~85 file TypeScript, build pass
+- ~89 file TypeScript, build pass
+
+## 2026-07-14 — Phase 4: Xã hội & Hoàn thiện
+
+- Favorites/Likes: `actions/favorites.ts`, `components/sets/like-button.tsx` (tim, count, toggle), tích hợp vào set-detail
+- Comments: `actions/comments.ts`, `components/sets/comment-section.tsx` (view, add, delete), tích hợp vào set-detail
+- Share button: `components/sets/share-button.tsx` (copy link ra clipboard)
+- Reports & moderation: `actions/reports.ts`, admin reports page (duyệt/dismiss/xoá set)
+- Admin users: `actions/admin.ts`, admin users page (bảng user, gán role)
+- Settings: `/settings` page (dark mode toggle, profile link, logout)
+- Dark mode: toggle trong settings page, `next-themes` đã setup từ đầu
+
+## 2026-07-14 — Phase 4 hoàn thành (còn lại bottom nav, PWA, i18n)
+
+- Mobile bottom nav: `components/layout/mobile-bottom-nav.tsx` (5 tabs: Dashboard, Khám phá, Tạo, Của tôi, Hồ sơ — chỉ hiện trên mobile, ẩn trên auth pages)
+- PWA: `public/manifest.json`, `public/sw.js`, `public/icon-192.svg`, `public/icon-512.svg`, `components/shared/sw-register.tsx` (register service worker)
+- i18n: `lib/i18n.ts` (vi/en dictionary + 60+ keys, setLocale/getLocale, persist to localStorage), locale switcher trong settings page
+- 103 file TypeScript + 9 public files, build pass
 
 ## 2026-07-14 — Phase 2 hoàn thành
 

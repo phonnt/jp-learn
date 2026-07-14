@@ -74,6 +74,10 @@ export function Navbar() {
                     <User className="mr-2 h-4 w-4" />
                     Hồ sơ
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/settings')}>
+                    <User className="mr-2 h-4 w-4" />
+                    Cài đặt
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signOut()}>
                     <LogOut className="mr-2 h-4 w-4" />
