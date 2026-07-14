@@ -23,6 +23,8 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false)
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(formSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
   })
 
   async function onSubmit(data: { email: string; password: string }) {

@@ -28,6 +28,7 @@ export default function RootLayout({
     <html
       lang="vi"
       className={`${geistSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full bg-canvas font-geist text-ink antialiased">
         <Providers>
@@ -35,7 +36,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1 pb-16 md:pb-0">{children}</main>
             <MobileBottomNav />
-            <SWRegister />
+            {process.env.NODE_ENV === 'production' && <SWRegister />}
           </div>
         </Providers>
       </body>

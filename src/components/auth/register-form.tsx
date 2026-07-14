@@ -20,11 +20,15 @@ const formSchema = z.object({
 export function RegisterForm() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, trigger, formState: { errors } } = useForm({
     resolver: zodResolver(formSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
   })
 
   async function onSubmit(data: { username: string; email: string; password: string }) {
+    const valid = await trigger()
+    if (!valid) return
     setLoading(true)
     setError(null)
     const formData = new FormData()
