@@ -62,6 +62,19 @@ export async function createSet(formData: FormData) {
 
   if (termsError) return { error: termsError.message }
 
+  // Link to folder if specified
+  const folderId = formData.get('folderId') as string
+  if (folderId) {
+    const { data: folder } = await supabase
+      .from('folders')
+      .select('user_id')
+      .eq('id', folderId)
+      .single()
+    if (folder && folder.user_id === user.id) {
+      await supabase.from('folder_sets').insert({ folder_id: folderId, set_id: set.id })
+    }
+  }
+
   revalidatePath('/sets')
   revalidatePath('/sets/my')
   redirect(`/sets/${set.id}`)

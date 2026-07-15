@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { Switch } from '@/components/ui/switch'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -18,11 +19,13 @@ import { Flashcard } from '@/components/study/flashcard'
 import { deleteSet, cloneSet, addTerm, updateTermInline } from '@/actions/sets'
 import { exportSetToCsv } from '@/actions/import-export'
 import { toggleTermStar } from '@/actions/term-stars'
+import { startStudySession, completeStudySession } from '@/actions/study'
 import { LikeButton } from './like-button'
 import { CommentSection } from './comment-section'
 import { ShareButton } from './share-button'
 import { StudySettingsDialog } from '@/components/study/study-settings-dialog'
 import type { StudyMode } from '@/hooks/use-study-settings'
+import { speak } from '@/lib/tts'
 import {
   BookOpen,
   FileText,
@@ -30,7 +33,6 @@ import {
   Grid3X3,
   Lock,
   Pencil,
-  Play,
   Trash2,
   Copy,
   AlertTriangle,
@@ -44,9 +46,22 @@ import {
   Folder,
   ChevronDown,
   ChevronUp,
+  Volume2,
+  ChevronRight,
+  Users,
+  Bookmark,
+  Printer,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { TSet, TTerm } from '@/types'
+
+type MasteryLevel = 'mastered' | 'learning' | 'not-studied'
+
+interface MasteryInfo {
+  termId: string
+  repetitions: number
+  nextReviewAt: string | null
+}
 
 interface SetDetailProps {
   set: TSet
@@ -56,9 +71,32 @@ interface SetDetailProps {
   starredTermIds: string[]
   folders: { id: string; title: string }[]
   relatedSets: { id: string; title: string }[]
+  studiersToday: number
+  masteryData: MasteryInfo[]
 }
 
-export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredTermIds: initialStarred, folders, relatedSets }: SetDetailProps) {
+function timeAgo(dateStr: string): string {
+  const now = Date.now()
+  const then = new Date(dateStr).getTime()
+  const diff = now - then
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  if (days < 1) return 'Hôm nay'
+  if (days === 1) return 'Hôm qua'
+  return `${days} ngày trước`
+}
+
+function getMasteryLevel(termId: string, masteryMap: Map<string, MasteryInfo>): MasteryLevel {
+  const m = masteryMap.get(termId)
+  if (!m) return 'not-studied'
+  if (m.repetitions >= 3) return 'mastered'
+  return 'learning'
+}
+
+export function SetDetail({
+  set, terms: initialTerms, isOwner, creator,
+  starredTermIds: initialStarred, folders, relatedSets,
+  studiersToday, masteryData,
+}: SetDetailProps) {
   const router = useRouter()
   const [settingsMode, setSettingsMode] = useState<StudyMode | null>(null)
   const [starredIds, setStarredIds] = useState<Set<string>>(new Set(initialStarred))
@@ -68,8 +106,34 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
   const [editValue, setEditValue] = useState('')
   const [newTerm, setNewTerm] = useState('')
   const [newDef, setNewDef] = useState('')
-  const [showTermList, setShowTermList] = useState(false)
+  const [showTermList, setShowTermList] = useState(true)
+  const [trackProgress, setTrackProgress] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
+  const [masteryFilter, setMasteryFilter] = useState<MasteryLevel | 'all'>('all')
   const inputRef = useRef<HTMLInputElement>(null)
+  const termRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
+  const masteryMap = useMemo(() => {
+    const map = new Map<string, MasteryInfo>()
+    masteryData.forEach(m => map.set(m.termId, m))
+    return map
+  }, [masteryData])
+
+  const masteryStats = useMemo(() => {
+    let mastered = 0, learning = 0, notStudied = 0
+    terms.forEach(t => {
+      const level = getMasteryLevel(t.id, masteryMap)
+      if (level === 'mastered') mastered++
+      else if (level === 'learning') learning++
+      else notStudied++
+    })
+    return { mastered, learning, notStudied }
+  }, [terms, masteryMap])
+
+  const filteredTerms = useMemo(() => {
+    if (masteryFilter === 'all') return terms
+    return terms.filter(t => getMasteryLevel(t.id, masteryMap) === masteryFilter)
+  }, [terms, masteryMap, masteryFilter])
 
   useEffect(() => {
     if (editingTerm) inputRef.current?.focus()
@@ -98,6 +162,7 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
     setEditingTerm(termId)
     setEditingField(field)
     setEditValue(currentValue)
+    setShowTermList(true)
   }
 
   async function saveEdit(termId: string) {
@@ -141,10 +206,43 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
     toast.success('Đã thêm thẻ')
   }
 
+  async function handleTrackProgressChange(checked: boolean) {
+    setTrackProgress(checked)
+    if (checked) {
+      const result = await startStudySession(set.id, 'flashcard')
+      if (result?.data?.id) {
+        setSessionId(result.data.id)
+        toast.success('Đã bắt đầu theo dõi')
+      } else if (result?.error) {
+        toast.error(result.error)
+        setTrackProgress(false)
+      }
+    } else if (sessionId) {
+      await completeStudySession(sessionId)
+      setSessionId(null)
+      toast.success('Đã lưu tiến độ')
+    }
+  }
+
+  function scrollToTerm(termId: string) {
+    setShowTermList(true)
+    setTimeout(() => {
+      const el = termRefs.current.get(termId)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      startEdit(termId, 'term', terms.find(t => t.id === termId)?.term || '')
+    }, 100)
+  }
+
+  function speakTerm(term: TTerm) {
+    const text = term.reading || term.term
+    speak(text, 'ja-JP')
+  }
+
   const flashcardTerms = terms.map(t => ({
     term: t.term,
     definition: t.definition,
     reading: t.reading,
+    id: t.id,
   }))
 
   return (
@@ -152,6 +250,21 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
         {/* Main content */}
         <div className="space-y-6 min-w-0">
+          {/* Breadcrumb folder */}
+          {folders.length > 0 && (
+            <div className="flex items-center gap-1.5 text-sm text-mid-gray">
+              <Folder className="h-4 w-4" />
+              {folders.map((f, i) => (
+                <span key={f.id} className="flex items-center gap-1.5">
+                  {i > 0 && <ChevronRight className="h-3 w-3" />}
+                  <Link href={`/folders/${f.id}`} className="hover:text-primary-action-fill hover:underline transition-colors">
+                    {f.title}
+                  </Link>
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* Header bar */}
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
@@ -168,6 +281,12 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
                 <Badge variant="secondary" className="text-xs">
                   {set.lang_term} → {set.lang_definition}
                 </Badge>
+                {studiersToday > 0 && (
+                  <span className="flex items-center gap-1">
+                    <Users className="h-3.5 w-3.5" />
+                    {studiersToday} studiers today
+                  </span>
+                )}
                 {creator && (
                   <span className="flex items-center gap-1">
                     <Avatar className="h-4 w-4">
@@ -179,14 +298,7 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
                     {creator.username || 'Người dùng'}
                   </span>
                 )}
-                {folders.map((f) => (
-                  <Link key={f.id} href={`/folders/${f.id}`}>
-                    <Badge variant="outline" className="text-xs gap-1 hover:bg-ash/50">
-                      <Folder className="h-3 w-3" />
-                      {f.title}
-                    </Badge>
-                  </Link>
-                ))}
+                <span className="text-xs text-fog">{timeAgo(set.created_at)}</span>
               </div>
             </div>
 
@@ -224,6 +336,10 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
                     <Copy className="mr-2 h-5 w-5" />
                     Sao chép
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => window.print()}>
+                    <Printer className="mr-2 h-5 w-5" />
+                    In
+                  </DropdownMenuItem>
                   {isOwner && (
                     <>
                       <DropdownMenuSeparator />
@@ -240,7 +356,19 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
 
           {/* Flashcard — default view, always visible */}
           <div className="bg-gradient-to-b from-paper-mist to-canvas-white rounded-cards border border-ash p-6">
-            <Flashcard terms={flashcardTerms} />
+            <Flashcard
+              terms={flashcardTerms}
+              setId={set.id}
+              starredTermIds={starredIds}
+              onToggleStar={handleToggleStar}
+              onEditTerm={scrollToTerm}
+            />
+
+            {/* Track progress toggle */}
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-mid-gray">
+              <Switch id="track-progress" checked={trackProgress} onCheckedChange={handleTrackProgressChange} />
+              <label htmlFor="track-progress" className="cursor-pointer select-none">Theo dõi tiến độ</label>
+            </div>
           </div>
 
           {/* Study mode buttons */}
@@ -284,30 +412,110 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
             setId={set.id}
           />
 
-          {/* Toggle term list */}
+          {/* Terms list */}
           <div className="border-t border-ash pt-4">
-            <button
-              type="button"
-              onClick={() => setShowTermList(!showTermList)}
-              className="flex items-center gap-2 text-sm font-medium text-ink hover:text-primary-action-fill transition-colors"
-            >
-              {showTermList ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              {showTermList ? 'Ẩn danh sách thuật ngữ' : 'Xem danh sách thuật ngữ'}
-            </button>
+            {/* Section heading + stats */}
+            <div className="flex items-center justify-between mb-3">
+              <button
+                type="button"
+                onClick={() => setShowTermList(!showTermList)}
+                className="flex items-center gap-2 text-sm font-medium text-ink hover:text-primary-action-fill transition-colors"
+              >
+                {showTermList ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                Thuật ngữ trong bộ thẻ này ({terms.length})
+              </button>
+
+              {showTermList && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex items-center gap-1 text-xs text-mid-gray hover:text-ink transition-colors outline-none cursor-default">
+                    <Bookmark className="h-3.5 w-3.5" />
+                    Thống kê của bạn
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end">
+                    <div className="px-3 py-2 space-y-1.5">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-green-600 font-medium">Đã thuộc</span>
+                        <span>{masteryStats.mastered}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-amber-600 font-medium">Đang học</span>
+                        <span>{masteryStats.learning}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-mid-gray font-medium">Chưa học</span>
+                        <span>{masteryStats.notStudied}</span>
+                      </div>
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
 
             {showTermList && (
               <div className="mt-3 space-y-2">
+                {/* Mastery filter buttons */}
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setMasteryFilter('all')}
+                    className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
+                      masteryFilter === 'all'
+                        ? 'border-primary-action-fill bg-primary-action-fill/10 text-primary-action-fill'
+                        : 'border-ash text-mid-gray hover:border-mid-gray'
+                    }`}
+                  >
+                    Tất cả ({terms.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMasteryFilter('not-studied')}
+                    className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
+                      masteryFilter === 'not-studied'
+                        ? 'border-primary-action-fill bg-primary-action-fill/10 text-primary-action-fill'
+                        : 'border-ash text-mid-gray hover:border-mid-gray'
+                    }`}
+                  >
+                    Chưa học ({masteryStats.notStudied})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMasteryFilter('learning')}
+                    className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
+                      masteryFilter === 'learning'
+                        ? 'border-primary-action-fill bg-primary-action-fill/10 text-primary-action-fill'
+                        : 'border-ash text-mid-gray hover:border-mid-gray'
+                    }`}
+                  >
+                    Đang học ({masteryStats.learning})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMasteryFilter('mastered')}
+                    className={`px-2.5 py-1 text-xs rounded-full border transition-colors ${
+                      masteryFilter === 'mastered'
+                        ? 'border-primary-action-fill bg-primary-action-fill/10 text-primary-action-fill'
+                        : 'border-ash text-mid-gray hover:border-mid-gray'
+                    }`}
+                  >
+                    Đã thuộc ({masteryStats.mastered})
+                  </button>
+                </div>
+
+                {/* Term rows */}
                 <div className="rounded-cards border border-ash overflow-hidden">
-                  {terms.map((term, index) => {
+                  {filteredTerms.map((term, index) => {
                     const isStarred = starredIds.has(term.id)
+                    const termIndex = terms.findIndex(t => t.id === term.id)
+                    const level = getMasteryLevel(term.id, masteryMap)
                     return (
                       <div
                         key={term.id}
+                        ref={(el) => { if (el) termRefs.current.set(term.id, el) }}
                         className={`group flex items-center gap-3 px-4 py-3 transition-colors ${
-                          index % 2 === 0 ? 'bg-canvas-white' : 'bg-paper-mist'
+                          termIndex % 2 === 0 ? 'bg-canvas-white' : 'bg-paper-mist'
                         }`}
                       >
-                        <span className="w-6 text-sm text-mid-gray shrink-0">{index + 1}</span>
+                        <span className="w-6 text-sm text-mid-gray shrink-0">{termIndex + 1}</span>
 
                         <div className="flex-1 min-w-0">
                           {editingTerm === term.id && editingField === 'term' ? (
@@ -358,6 +566,27 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
                           )}
                         </div>
 
+                        {/* Mastery dot */}
+                        {level !== 'not-studied' && (
+                          <span
+                            className={`shrink-0 h-2 w-2 rounded-full ${
+                              level === 'mastered' ? 'bg-green-500' : 'bg-amber-400'
+                            }`}
+                            title={level === 'mastered' ? 'Đã thuộc' : 'Đang học'}
+                          />
+                        )}
+
+                        {/* Audio */}
+                        <button
+                          type="button"
+                          onClick={() => speakTerm(term)}
+                          className="shrink-0 p-1 rounded text-mid-gray hover:text-ink opacity-0 group-hover:opacity-100 transition-all"
+                          aria-label="Phát âm"
+                        >
+                          <Volume2 className="h-4 w-4" />
+                        </button>
+
+                        {/* Star */}
                         <button
                           type="button"
                           onClick={() => handleToggleStar(term.id)}
@@ -420,10 +649,11 @@ export function SetDetail({ set, terms: initialTerms, isOwner, creator, starredT
                     {creator.username?.charAt(0).toUpperCase() || '?'}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <p className="text-sm font-medium text-ink">{creator.username || 'Người dùng'}</p>
-                  <p className="text-xs text-mid-gray">{terms.length} thuật ngữ</p>
-                </div>
+                  <div>
+                    <p className="text-sm font-medium text-ink">{creator.username || 'Người dùng'}</p>
+                    <p className="text-xs text-mid-gray">{terms.length} thuật ngữ</p>
+                    <p className="text-xs text-fog">{timeAgo(set.created_at)}</p>
+                  </div>
               </div>
             ) : (
               <p className="text-sm text-mid-gray">Không rõ</p>

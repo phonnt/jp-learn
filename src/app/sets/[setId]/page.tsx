@@ -4,6 +4,12 @@ import { SetDetail } from '@/components/sets/set-detail'
 
 export const dynamic = 'force-dynamic'
 
+interface MasteryInfo {
+  termId: string
+  repetitions: number
+  nextReviewAt: string | null
+}
+
 export default async function SetDetailPage({ params }: { params: Promise<{ setId: string }> }) {
   const { setId } = await params
   const supabase = await createClient()
@@ -34,6 +40,7 @@ export default async function SetDetailPage({ params }: { params: Promise<{ setI
     .eq('id', set.user_id)
     .single()
 
+  // Starred terms
   let starredTermIds: string[] = []
   if (user) {
     const { data: stars } = await supabase
@@ -65,6 +72,35 @@ export default async function SetDetailPage({ params }: { params: Promise<{ setI
     .order('created_at', { ascending: false })
     .limit(5)
 
+  // Studiers today (distinct users)
+  let studiersToday = 0
+  const todayStart = new Date()
+  todayStart.setHours(0, 0, 0, 0)
+  const { data: studierRows } = await supabase
+    .from('study_sessions')
+    .select('user_id')
+    .eq('set_id', setId)
+    .gte('started_at', todayStart.toISOString())
+  if (studierRows) {
+    studiersToday = new Set(studierRows.map(r => r.user_id)).size
+  }
+
+  // Mastery data for current user
+  let masteryData: MasteryInfo[] = []
+  if (user && terms) {
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select('term_id, repetitions, next_review_at')
+      .eq('user_id', user.id)
+      .in('term_id', terms.map(t => t.id))
+
+    masteryData = (reviews || []).map(r => ({
+      termId: r.term_id,
+      repetitions: r.repetitions,
+      nextReviewAt: r.next_review_at,
+    }))
+  }
+
   return (
     <SetDetail
       set={set}
@@ -74,6 +110,8 @@ export default async function SetDetailPage({ params }: { params: Promise<{ setI
       starredTermIds={starredTermIds}
       folders={folders}
       relatedSets={relatedSets || []}
+      studiersToday={studiersToday}
+      masteryData={masteryData}
     />
   )
 }

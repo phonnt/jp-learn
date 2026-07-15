@@ -54,6 +54,9 @@ export function LearnMode({ setId, title }: LearnModeProps) {
   }
 
   const display = useStudySettings((state) => state.learn.display)
+  const questionTypes = useStudySettings((state) => state.learn.questionTypes)
+  const direction = useStudySettings((state) => state.learn.direction)
+  const activeType = questionTypes[currentIndex % questionTypes.length] ?? 'written'
   const currentTerm = terms[currentIndex]
   const progress = terms.length > 0 ? ((currentIndex) / terms.length) * 100 : 0
 
@@ -102,6 +105,40 @@ export function LearnMode({ setId, title }: LearnModeProps) {
     } else {
       handleIncorrect()
     }
+  }
+
+  function getOptions(): string[] {
+    if (!currentTerm) return []
+    const correct = direction === 'term-to-def' ? currentTerm.definition : currentTerm.term
+    const distractors = terms
+      .filter(t => t.id !== currentTerm.id)
+      .map(t => direction === 'term-to-def' ? t.definition : t.term)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3)
+    return [correct, ...distractors].sort(() => Math.random() - 0.5)
+  }
+
+  function handleMultipleChoice(selected: string) {
+    if (!currentTerm) return
+    const correct = direction === 'term-to-def' ? currentTerm.definition : currentTerm.term
+    if (selected === correct) {
+      handleCorrect()
+    } else {
+      handleIncorrect()
+    }
+  }
+
+  function handleTrueFalse(isCorrectAnswer: boolean) {
+    if (isCorrectAnswer) {
+      handleCorrect()
+    } else {
+      handleIncorrect()
+    }
+  }
+
+  function getQuestionLabel(): string {
+    if (direction === 'def-to-term') return 'Nhập từ tương ứng:'
+    return 'Nhập nghĩa của:'
   }
 
   if (completed) {
@@ -164,31 +201,73 @@ export function LearnMode({ setId, title }: LearnModeProps) {
 
       <Card>
         <CardContent className="p-4 text-center">
-          <p className="mb-2 text-xs text-fog">Nhập nghĩa của:</p>
-          {display.showKanji && <p className="text-2xl font-semibold text-charcoal">{currentTerm.term}</p>}
-          {display.showReading && currentTerm.reading && (
-            <p className="mt-1 text-sm text-fog">{currentTerm.reading}</p>
+          <p className="mb-2 text-xs text-fog">{getQuestionLabel()}</p>
+          {direction === 'term-to-def' ? (
+            <>
+              {display.showKanji && <p className="text-2xl font-semibold text-charcoal">{currentTerm.term}</p>}
+              {display.showReading && currentTerm.reading && (
+                <p className="mt-1 text-sm text-fog">{currentTerm.reading}</p>
+              )}
+            </>
+          ) : (
+            <>
+              {display.showDefinition && <p className="text-2xl font-semibold text-charcoal">{currentTerm.definition}</p>}
+            </>
           )}
 
           {isCorrect === null ? (
-            <div className="mt-6 space-y-3">
-              <Input
-                placeholder="Gõ nghĩa tiếng Việt..."
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCheckAnswer()}
-                autoFocus
-              />
-              <div className="flex gap-2">
-                <Button className="flex-1" onClick={handleCheckAnswer}>
+            activeType === 'written' ? (
+              <div className="mt-6 space-y-3">
+                <Input
+                  placeholder="Gõ câu trả lời..."
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleCheckAnswer()}
+                  autoFocus
+                />
+                <div className="flex gap-2">
+                  <Button className="flex-1" onClick={handleCheckAnswer}>
+                    <Check className="mr-1 h-5 w-5" />
+                    Kiểm tra
+                  </Button>
+                  <Button variant="outline" onClick={() => { setIsCorrect(false); handleIncorrect() }}>
+                    Tôi không biết
+                  </Button>
+                </div>
+              </div>
+            ) : activeType === 'multiple-choice' ? (
+              <div className="mt-6 space-y-3">
+                {getOptions().map((option, idx) => (
+                  <Button
+                    key={idx}
+                    variant="outline"
+                    className="w-full justify-start text-left"
+                    onClick={() => handleMultipleChoice(option)}
+                  >
+                    {option}
+                  </Button>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6 flex gap-3 justify-center">
+                <Button
+                  variant="outline"
+                  className="px-8"
+                  onClick={() => handleTrueFalse(true)}
+                >
                   <Check className="mr-1 h-5 w-5" />
-                  Kiểm tra
+                  Đúng
                 </Button>
-                <Button variant="outline" onClick={() => { setIsCorrect(false); handleIncorrect() }}>
-                  Tôi không biết
+                <Button
+                  variant="outline"
+                  className="px-8"
+                  onClick={() => handleTrueFalse(false)}
+                >
+                  <X className="mr-1 h-5 w-5" />
+                  Sai
                 </Button>
               </div>
-            </div>
+            )
           ) : (
             <div className="mt-6 space-y-4">
               <div className={`rounded-cards border border-ash p-4 ${isCorrect ? 'border-green-300 bg-green-50' : 'border-ember/30 bg-red-50'}`}>

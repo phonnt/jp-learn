@@ -105,7 +105,7 @@ function QuestionTypeToggle({
 
   function toggle(t: QuestionType) {
     const next = types.includes(t) ? types.filter((x) => x !== t) : [...types, t]
-    if (next.length > 0) onChange(next)
+    onChange(next)
   }
 
   return (

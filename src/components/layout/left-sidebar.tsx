@@ -107,7 +107,7 @@ export function LeftSidebar() {
 
           {desktopOpen && user && <div className="mx-3 h-px bg-ash" />}
 
-          <CreateFolderDialog open={folderDialogOpen} onOpenChange={setFolderDialogOpen} />
+          <CreateFolderDialog open={folderDialogOpen} onOpenChange={setFolderDialogOpen} onCreated={(f) => setFolders(prev => [f, ...prev])} />
 
           {/* Explore section */}
           <div className="p-2">
@@ -192,7 +192,7 @@ function MobileSheet() {
           </div>
         )}
 
-        <CreateFolderDialog open={folderDialogOpen} onOpenChange={(v) => { setFolderDialogOpen(v) }} />
+        <CreateFolderDialog open={folderDialogOpen} onOpenChange={(v) => { setFolderDialogOpen(v) }} onCreated={(f) => setFolders(prev => [f, ...prev])} />
 
         <div className="mx-3 h-px bg-ash" />
 

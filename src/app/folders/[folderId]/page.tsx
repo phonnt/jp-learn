@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { SetCard } from '@/components/sets/set-card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,9 +43,17 @@ export default async function FolderDetailPage({ params }: { params: Promise<{ f
           {folder.description && <p className="text-mid-gray">{folder.description}</p>}
           <p className="text-sm text-mid-gray">{sets.length} bộ thẻ</p>
         </div>
-        <Button variant="outline" asChild>
-          <Link href="/folders">Quay lại</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href={`/sets/new?folderId=${folderId}`}>
+              <Plus className="h-4 w-4 mr-1" />
+              Tạo bộ thẻ
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/folders">Quay lại</Link>
+          </Button>
+        </div>
       </div>
 
       {sets.length > 0 ? (
@@ -54,8 +63,14 @@ export default async function FolderDetailPage({ params }: { params: Promise<{ f
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-mid-gray">Folder chưa có bộ thẻ nào. Thêm từ trang chi tiết bộ thẻ.</p>
+        <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+          <p className="text-mid-gray">Folder chưa có bộ thẻ nào.</p>
+          <Button asChild>
+            <Link href={`/sets/new?folderId=${folderId}`}>
+              <Plus className="h-4 w-4 mr-1" />
+              Tạo bộ thẻ mới trong thư mục này
+            </Link>
+          </Button>
         </div>
       )}
     </div>

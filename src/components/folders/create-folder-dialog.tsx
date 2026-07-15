@@ -24,9 +24,10 @@ const formSchema = z.object({
 interface CreateFolderDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCreated?: (folder: { id: string; title: string }) => void
 }
 
-export function CreateFolderDialog({ open, onOpenChange }: CreateFolderDialogProps) {
+export function CreateFolderDialog({ open, onOpenChange, onCreated }: CreateFolderDialogProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -52,6 +53,7 @@ export function CreateFolderDialog({ open, onOpenChange }: CreateFolderDialogPro
     reset()
     onOpenChange(false)
     if (result.id) {
+      onCreated?.({ id: result.id, title: data.title })
       router.push(`/folders/${result.id}`)
     }
   }

@@ -1,39 +1,45 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { CreateFolderDialog } from '@/components/folders/create-folder-dialog'
+import { createClient } from '@/lib/supabase/client'
+import { useSession } from '@/hooks/use-supabase'
 import { FolderPlus, FolderOpen } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
+interface TFolder { id: string; title: string; description: string | null }
 
-export default async function FoldersPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
+export default function FoldersPage() {
+  const { session } = useSession()
+  const [folders, setFolders] = useState<TFolder[]>([])
+  const [dialogOpen, setDialogOpen] = useState(false)
 
-  const { data: folders } = await supabase
-    .from('folders')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+  useEffect(() => {
+    if (!session?.user?.id) return
+    const supabase = createClient()
+    supabase.from('folders').select('*').eq('user_id', session.user.id).order('created_at', { ascending: false }).then(({ data }) => {
+      if (data) setFolders(data as TFolder[])
+    })
+  }, [session?.user?.id])
 
   return (
     <div className="mx-auto max-w-screen-xl space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-heading-sm font-semibold text-ink">Bộ sưu tập</h1>
-          <p className="text-mid-gray">{folders?.length || 0} folder</p>
+          <p className="text-mid-gray">{folders.length} folder</p>
         </div>
-        <Button asChild>
-          <Link href="/folders/new">
-            <FolderPlus className="mr-1 h-5 w-5" />
-            Tạo folder
-          </Link>
+        <Button onClick={() => setDialogOpen(true)}>
+          <FolderPlus className="mr-1 h-5 w-5" />
+          Tạo folder
         </Button>
       </div>
 
-      {folders && folders.length > 0 ? (
+      <CreateFolderDialog open={dialogOpen} onOpenChange={setDialogOpen} onCreated={(f) => setFolders(prev => [{ ...f, description: null }, ...prev])} />
+
+      {folders.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {folders.map(folder => (
             <Link key={folder.id} href={`/folders/${folder.id}`}>

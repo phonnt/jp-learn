@@ -135,3 +135,21 @@
 - Dọn sạch icon nhỏ residual: `h-3 w-3` → `h-5 w-5` ở flashcard, spell-mode, term-editor, set-card, hard-words-mode
 - Xoá `--spacing-*` overrides sai (4–112px) — phá hỏng Tailwind v4 spacing scale (h-12 thành 12px thay vì 48px)
 - Auth page whitespace: `h-full` → `min-h-[calc(100dvh-3.5rem)]` (fill viewport trừ navbar)
+
+## 2026-07-15 — Set detail alignment with Quizlet
+
+- Embedded Flashcard as default view in set-detail.tsx (always visible, term list collapsed by default)
+- Redirected `/sets/[setId]/flashcard` → `/sets/[setId]`
+- Created `docs/plans/set-detail-comparison.md` — 35-item table with Quizlet vs JP-Learn status + test pass column
+- Implemented all 11 pending features: Sound (flashcard + term list), Hint, Star, Edit, Fullscreen, Breadcrumb folder, Studiers today stats, Track progress toggle, Term section heading, Mastery filter chips, Your stats dropdown, Audio per term row, keyboard shortcuts (←→ S H F)
+- Added `onCreated` callback to `CreateFolderDialog` — sidebar updates immediately
+- Added folder selector dropdown in `SetEditor` — passes `folderId` to `createSet`
+- Added `folderId` param to `createSet` action
+- Added "Tạo bộ thẻ" button on folder detail page → `/sets/new?folderId=...`
+- Deleted `/folders/new` page — `/folders` page now uses modal
+- Cleaned up temp files: `quizlet-home.txt`, `quizlet-set-page.md`
+- Tested all study modes (Flashcards, Learn, Quiz, Test, Match, Spell) via Playwright — no errors
+- Added Created time ("X ngày trước") in header + sidebar — uses `timeAgo()` helper
+- Moved Auto-play button into flashcard bottom nav bar (Play icon)
+- Added Print option to More dropdown
+- Updated comparison file: 32 done, 3 partial (Saved/Calendar, StudyPlan, Blocks/Blast)
