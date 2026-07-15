@@ -41,5 +41,6 @@ package-lock.json
 next-env.d.ts
 
 # playwright
+.playwright
 .playwright-mcp
 test-results
