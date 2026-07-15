@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { AutoPlayFlashcard } from '@/components/study/auto-play-flashcard'
+import { StudyHeader } from '@/components/shared/study-header'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,10 +25,7 @@ export default async function AutoPlayPage({ params }: { params: Promise<{ setId
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-6">
-      <div className="text-center">
-        <h1 className="text-heading-sm font-semibold text-ink">{set.title}</h1>
-        <p className="text-mid-gray">Tự động chạy flashcard</p>
-      </div>
+      <StudyHeader setId={setId} setTitle={set.title} modeLabel="Tự động phát" />
       <AutoPlayFlashcard
         terms={(terms || []).map(t => ({ term: t.term, definition: t.definition, reading: t.reading }))}
       />

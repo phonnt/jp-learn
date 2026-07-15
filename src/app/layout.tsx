@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/shared/providers";
 import { Navbar } from "@/components/layout/navbar";
+import { LeftSidebar } from "@/components/layout/left-sidebar";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { SWRegister } from "@/components/shared/sw-register";
 import { GlobalLoadingOverlay } from "@/components/shared/global-loading-overlay";
@@ -35,7 +36,10 @@ export default function RootLayout({
         <Providers>
           <div className="flex min-h-screen flex-col">
             <Navbar />
-            <main className="flex-1">{children}</main>
+            <div className="flex flex-1">
+              <LeftSidebar />
+              <main className="flex-1 min-w-0">{children}</main>
+            </div>
             <MobileBottomNav />
             {process.env.NODE_ENV === 'production' && <SWRegister />}
           </div>

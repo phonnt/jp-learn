@@ -25,6 +25,27 @@ export async function createFolder(formData: FormData) {
   redirect(`/folders/${folder.id}`)
 }
 
+export async function createFolderQuick(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const title = formData.get('title') as string
+  if (!title?.trim()) return { error: 'Title is required' }
+
+  const { data: folder, error } = await supabase
+    .from('folders')
+    .insert({ user_id: user.id, title: title.trim() })
+    .select()
+    .single()
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/folders')
+  revalidatePath('/')
+  return { id: folder.id }
+}
+
 export async function deleteFolder(folderId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

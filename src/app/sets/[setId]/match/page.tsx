@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { MatchGame } from '@/components/study/match-game'
+import { StudyHeader } from '@/components/shared/study-header'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,10 +25,7 @@ export default async function MatchPage({ params }: { params: Promise<{ setId: s
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-6">
-      <div className="text-center">
-        <h1 className="text-heading-sm font-semibold text-ink">{set.title}</h1>
-        <p className="text-mid-gray">Ghép từ với nghĩa</p>
-      </div>
+      <StudyHeader setId={setId} setTitle={set.title} modeLabel="Match" />
       <MatchGame
         terms={(terms || []).map(t => ({ id: t.id, term: t.term, definition: t.definition }))}
       />

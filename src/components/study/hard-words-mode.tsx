@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge'
 import { getHardWords, getHardWordsFromReviews } from '@/actions/hard-words'
 import { saveReview, startStudySession, saveStudyResults, completeStudySession } from '@/actions/study'
 import { AlertTriangle, ArrowRight, Check, RotateCw, X } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface HardWord {
   id: string
@@ -54,6 +56,7 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
     setLoading(false)
   }
 
+  const display = useStudySettings((state) => state.hardWords.display)
   const current = words[currentIndex]
   const progress = words.length > 0 ? (currentIndex / words.length) * 100 : 0
 
@@ -135,10 +138,13 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {words.length}</span>
-        <Badge variant="secondary" className="flex items-center gap-1 text-xs">
-          <AlertTriangle className="h-5 w-5" />
-          Sai {current.wrongCount || '?'} lần
-        </Badge>
+        <span className="flex items-center gap-2">
+          <Badge variant="secondary" className="flex items-center gap-1 text-xs">
+            <AlertTriangle className="h-5 w-5" />
+            Sai {current.wrongCount || '?'} lần
+          </Badge>
+          <StudySettingsInline mode="hard-words" />
+        </span>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -146,8 +152,8 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <p className="mb-2 text-xs text-fog">Ôn tập từ hay sai:</p>
-          <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
-          {current.reading && <p className="mt-1 text-sm text-fog">{current.reading}</p>}
+          {display.showKanji && <p className="text-2xl font-semibold text-charcoal">{current.term}</p>}
+          {display.showReading && current.reading && <p className="mt-1 text-sm text-fog">{current.reading}</p>}
 
           {isCorrect === null ? (
             <div className="mt-6 space-y-3">
@@ -175,7 +181,7 @@ export function HardWordsMode({ setId }: HardWordsModeProps) {
                   {isCorrect ? 'Đúng!' : 'Sai!'}
                 </p>
                 <p className="mt-1 text-charcoal">
-                  Đáp án: <strong>{current.definition}</strong>
+                  Đáp án: <strong>{display.showDefinition ? current.definition : '***'}</strong>
                 </p>
               </div>
               <Button className="w-full" onClick={handleNext}>

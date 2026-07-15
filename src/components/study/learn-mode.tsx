@@ -9,6 +9,8 @@ import { startStudySession, completeStudySession, saveStudyResults, saveReview, 
 import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { ArrowLeft, ArrowRight, Check, RotateCw, X } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface LearnTerm {
   id: string
@@ -51,6 +53,7 @@ export function LearnMode({ setId, title }: LearnModeProps) {
     }
   }
 
+  const display = useStudySettings((state) => state.learn.display)
   const currentTerm = terms[currentIndex]
   const progress = terms.length > 0 ? ((currentIndex) / terms.length) * 100 : 0
 
@@ -149,9 +152,12 @@ export function LearnMode({ setId, title }: LearnModeProps) {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {terms.length}</span>
-        <Badge variant="secondary" className="text-xs">
-          {isCorrect === null ? 'Trả lời' : isCorrect ? 'Đúng' : 'Sai'}
-        </Badge>
+        <span className="flex items-center gap-2">
+          <Badge variant="secondary" className="text-xs">
+            {isCorrect === null ? 'Trả lời' : isCorrect ? 'Đúng' : 'Sai'}
+          </Badge>
+          <StudySettingsInline mode="learn" />
+        </span>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -159,8 +165,8 @@ export function LearnMode({ setId, title }: LearnModeProps) {
       <Card>
         <CardContent className="p-4 text-center">
           <p className="mb-2 text-xs text-fog">Nhập nghĩa của:</p>
-          <p className="text-2xl font-semibold text-charcoal">{currentTerm.term}</p>
-          {currentTerm.reading && (
+          {display.showKanji && <p className="text-2xl font-semibold text-charcoal">{currentTerm.term}</p>}
+          {display.showReading && currentTerm.reading && (
             <p className="mt-1 text-sm text-fog">{currentTerm.reading}</p>
           )}
 
@@ -190,7 +196,7 @@ export function LearnMode({ setId, title }: LearnModeProps) {
                   {isCorrect ? 'Đúng!' : 'Sai!'}
                 </p>
                 <p className="mt-1 text-charcoal">
-                  Đáp án: <strong>{currentTerm.definition}</strong>
+                  Đáp án: <strong>{display.showDefinition ? currentTerm.definition : '***'}</strong>
                 </p>
               </div>
               <Button className="w-full" onClick={handleNext}>

@@ -8,12 +8,15 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Volume2, RotateCw, Check, SkipForward, ArrowRight, AlertTriangle, Volume1, VolumeX } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface SpellModeProps {
   terms: Array<{ id: string; term: string; definition: string; reading: string | null }>
 }
 
 export function SpellMode({ terms }: SpellModeProps) {
+  const display = useStudySettings((state) => state.spell.display)
   const { words, currentIndex, attempts, correct, isComplete, setWords, markCorrect, markIncorrect, next, reset } = useSpellStore()
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null)
@@ -94,9 +97,12 @@ export function SpellMode({ terms }: SpellModeProps) {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {words.length}</span>
-        <Badge variant="secondary" className="text-xs">
-          {feedback === 'correct' ? 'Đúng' : feedback === 'incorrect' ? 'Sai' : 'Nghe và gõ'}
-        </Badge>
+        <span className="flex items-center gap-2">
+          <Badge variant="secondary" className="text-xs">
+            {feedback === 'correct' ? 'Đúng' : feedback === 'incorrect' ? 'Sai' : 'Nghe và gõ'}
+          </Badge>
+          <StudySettingsInline mode="spell" />
+        </span>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -154,9 +160,9 @@ export function SpellMode({ terms }: SpellModeProps) {
                 <p className={`text-sm font-medium ${feedback === 'correct' ? 'text-green-700' : 'text-ember'}`}>
                   {feedback === 'correct' ? 'Đúng!' : 'Sai!'}
                 </p>
-                <p className="mt-1 text-lg font-semibold text-charcoal">{current.term}</p>
-                {current.reading && <p className="text-sm text-fog">{current.reading}</p>}
-                <p className="text-sm text-fog">Nghĩa: {current.definition}</p>
+                {display.showKanji && <p className="mt-1 text-lg font-semibold text-charcoal">{current.term}</p>}
+                {display.showReading && current.reading && <p className="text-sm text-fog">{current.reading}</p>}
+                {display.showDefinition && <p className="text-sm text-fog">Nghĩa: {current.definition}</p>}
               </div>
               <Button className="w-full" onClick={handleContinue}>
                 Tiếp theo

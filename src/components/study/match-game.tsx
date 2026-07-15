@@ -6,12 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Clock, RotateCw, Trophy } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface MatchGameProps {
   terms: Array<{ id: string; term: string; definition: string }>
 }
 
 export function MatchGame({ terms }: MatchGameProps) {
+  const display = useStudySettings((state) => state.match.display)
   const { cards, selected, timer, moves, isRunning, isComplete, selectCard, tick, reset, bestScore } = useMatchStore()
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -89,11 +92,20 @@ export function MatchGame({ terms }: MatchGameProps) {
           {formatTime(timer)}
         </div>
         <span>{moves} lượt</span>
-        <span>{cards.filter(c => c.matched).length / 2}/{terms.length} cặp</span>
+        <span className="flex items-center gap-2">
+          {cards.filter(c => c.matched).length / 2}/{terms.length} cặp
+          <StudySettingsInline mode="match" />
+        </span>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {cards.map((card) => (
+        {cards
+          .filter((card) => {
+            if (card.type === 'term' && !display.showKanji) return false
+            if (card.type === 'definition' && !display.showDefinition) return false
+            return true
+          })
+          .map((card) => (
           <button
             key={card.id}
             onClick={() => selectCard(card.id)}

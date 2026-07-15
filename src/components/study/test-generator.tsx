@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { Check, X, RotateCw, ArrowRight, BookOpen } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface TestTerm {
   id: string
@@ -31,6 +33,7 @@ interface TestGeneratorProps {
 }
 
 export function TestGenerator({ terms }: TestGeneratorProps) {
+  const display = useStudySettings((state) => state.test.display)
   const allDefs = useMemo(() => terms.map(t => t.definition), [terms])
 
   const questions = useMemo(() => {
@@ -108,7 +111,7 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
                   ) : (
                     <X className="h-5 w-5 shrink-0 text-ember" />
                   )}
-                  <span className="text-fog">{q.term}</span>
+                  <span className="text-fog">{display.showKanji ? q.term : '***'}</span>
                 </div>
               ))}
             </div>
@@ -128,9 +131,12 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {questions.length}</span>
-        <Badge variant="secondary" className="text-xs">
-          {current.type === 'multiple-choice' ? 'Chọn đáp án' : current.type === 'written' ? 'Tự luận' : 'Đúng/Sai'}
-        </Badge>
+        <span className="flex items-center gap-2">
+          <Badge variant="secondary" className="text-xs">
+            {current.type === 'multiple-choice' ? 'Chọn đáp án' : current.type === 'written' ? 'Tự luận' : 'Đúng/Sai'}
+          </Badge>
+          <StudySettingsInline mode="test" />
+        </span>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -144,9 +150,9 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
                 ? 'Gõ nghĩa của từ:'
                 : 'Chọn nghĩa đúng của:'}
           </p>
-          <p className="mb-6 text-2xl font-semibold text-charcoal">{current.term}</p>
+          {display.showKanji && <p className="mb-6 text-2xl font-semibold text-charcoal">{current.term}</p>}
 
-          {current.type === 'true-false' && (
+          {current.type === 'true-false' && display.showDefinition && (
             <p className="mb-4 text-sm text-fog italic">{current.definition}</p>
           )}
 
@@ -157,7 +163,7 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
                   {feedback ? 'Đúng!' : 'Sai!'}
                 </p>
                 <p className="mt-1 text-charcoal">
-                  Đáp án: <strong>{current.correctAnswer.toString()}</strong>
+                  Đáp án: <strong>{display.showDefinition ? current.correctAnswer.toString() : '***'}</strong>
                 </p>
               </div>
               <Button className="w-full" onClick={handleNext}>
@@ -167,7 +173,7 @@ export function TestGenerator({ terms }: TestGeneratorProps) {
             </div>
           ) : (
             <>
-              {current.type === 'multiple-choice' && current.options && (
+              {current.type === 'multiple-choice' && current.options && display.showDefinition && (
                 <div className="space-y-3">
                   {current.options.map((opt, i) => (
                     <Button key={i} variant="outline" className="w-full justify-start text-left" onClick={() => handleAnswer(opt)}>

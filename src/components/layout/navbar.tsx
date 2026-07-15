@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -13,41 +14,47 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { LayoutDashboard, LogOut, Plus, User, Target, Award, Settings, Search } from 'lucide-react'
+import { LayoutDashboard, LogOut, Plus, User, Target, Award, Settings, List, Folder } from 'lucide-react'
+import { SidebarToggle } from '@/components/layout/left-sidebar'
+import { CreateFolderDialog } from '@/components/folders/create-folder-dialog'
 
 export function Navbar() {
   const router = useRouter()
   const { session, loading } = useSession()
   const user = session?.user
+  const [folderDialogOpen, setFolderDialogOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 border-b border-ash bg-canvas-white/95 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-1">
+          <SidebarToggle />
           <Link href="/" className="text-lg font-semibold tracking-tight text-charcoal">
             JP-Learn
           </Link>
-          <nav className="hidden items-center gap-1 md:flex">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/sets">Khám phá</Link>
-            </Button>
-            {user && (
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/sets/my">Bộ thẻ của tôi</Link>
-              </Button>
-            )}
-          </nav>
         </div>
 
         <div className="flex items-center gap-3">
           {loading ? null : user ? (
             <>
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/sets/new">
-                  <Plus className="mr-1 h-5 w-5" />
-                  Tạo set
-                </Link>
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1 rounded-small px-2 py-1 text-sm font-medium text-ink hover:bg-ash/50 outline-none data-open:bg-ash/50 cursor-default">
+                  <Plus className="h-5 w-5" />
+                  Tạo
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-44" align="end">
+                  <DropdownMenuItem onClick={() => router.push('/sets/new')}>
+                    <List className="mr-2 h-5 w-5" />
+                    Bộ thẻ
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFolderDialogOpen(true)}>
+                    <Folder className="mr-2 h-5 w-5" />
+                    Thư mục
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <CreateFolderDialog open={folderDialogOpen} onOpenChange={setFolderDialogOpen} />
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-full outline-none">
                   <Avatar className="h-8 w-8">

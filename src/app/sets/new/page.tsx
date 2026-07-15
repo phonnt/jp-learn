@@ -8,7 +8,7 @@ export default async function NewSetPage() {
   if (!user) redirect('/auth/login?redirect=/sets/new')
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-6">
       <div>
         <h1 className="text-heading-sm font-semibold text-ink">Tạo bộ thẻ mới</h1>
         <p className="text-mid-gray">Nhập từ vựng tiếng Nhật và nghĩa tiếng Việt</p>

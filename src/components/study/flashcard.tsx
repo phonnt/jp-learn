@@ -2,9 +2,11 @@
 
 import { useEffect, useCallback } from 'react'
 import { useFlashcardStore } from '@/hooks/use-study'
+import { useStudySettings } from '@/hooks/use-study-settings'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
 import { ArrowLeft, ArrowRight, Shuffle, RotateCw, Check } from 'lucide-react'
 
 interface FlashcardProps {
@@ -13,6 +15,8 @@ interface FlashcardProps {
 
 export function Flashcard({ terms }: FlashcardProps) {
   const { currentIndex, flipped, cards, setCards, next, prev, flip, shuffle, reset } = useFlashcardStore()
+  const display = useStudySettings((state) => state.flashcard.display)
+  const activeSide = flipped ? display.back : display.front
 
   useEffect(() => {
     setCards(terms)
@@ -38,7 +42,10 @@ export function Flashcard({ terms }: FlashcardProps) {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {cards.length}</span>
-        <span>{flipped ? 'Đang xem nghĩa' : 'Đang xem từ'}</span>
+        <span className="flex items-center gap-2">
+          {flipped ? 'Đang xem nghĩa' : 'Đang xem từ'}
+          <StudySettingsInline mode="flashcard" />
+        </span>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -50,9 +57,14 @@ export function Flashcard({ terms }: FlashcardProps) {
         <CardContent className="flex h-[280px] flex-col items-center justify-center p-4 text-center">
           {flipped ? (
             <>
-              <p className="text-lg font-medium text-charcoal">{current.definition}</p>
-              {current.reading && (
+              {activeSide.showDefinition && (
+                <p className="text-lg font-medium text-charcoal">{current.definition}</p>
+              )}
+              {activeSide.showReading && current.reading && (
                 <p className="mt-4 text-sm text-fog">Cách đọc: {current.reading}</p>
+              )}
+              {activeSide.showKanji && (
+                <p className="mt-2 text-sm text-mid-gray">{current.term}</p>
               )}
               <Button variant="ghost" size="sm" className="mt-4 text-xs text-fog" onClick={(e) => { e.stopPropagation(); flip() }}>
                 <RotateCw className="mr-1 h-5 w-5" />
@@ -61,7 +73,15 @@ export function Flashcard({ terms }: FlashcardProps) {
             </>
           ) : (
             <>
-              <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
+              {activeSide.showKanji && (
+                <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
+              )}
+              {activeSide.showReading && current.reading && (
+                <p className="mt-2 text-sm text-fog">{current.reading}</p>
+              )}
+              {activeSide.showDefinition && (
+                <p className="mt-2 text-sm text-mid-gray">{current.definition}</p>
+              )}
               <Button variant="ghost" size="sm" className="mt-6 text-xs text-fog" onClick={(e) => { e.stopPropagation(); flip() }}>
                 <RotateCw className="mr-1 h-5 w-5" />
                 Lật để xem nghĩa

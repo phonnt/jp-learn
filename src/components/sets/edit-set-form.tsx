@@ -8,11 +8,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { Card, CardContent } from '@/components/ui/card'
 import { TermEditor, type TermEntry } from './term-editor'
 import { updateSet } from '@/actions/sets'
 import { useRouter } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Globe, Lock } from 'lucide-react'
 import type { TSet, TTerm } from '@/types'
 
 const formSchema = z.object({
@@ -50,10 +49,24 @@ export function EditSetForm({ set, terms: initialTerms }: EditSetFormProps) {
     setLoading(true)
     setError(null)
 
+    const validTerms = terms.filter((t) => t.term && t.definition)
+    if (validTerms.length === 0) {
+      setError('Cần ít nhất 1 thẻ từ vựng')
+      setLoading(false)
+      return
+    }
+
     const formData = new FormData()
     formData.append('title', data.title)
     if (data.description) formData.append('description', data.description)
     formData.append('is_public', String(data.is_public))
+
+    validTerms.forEach((t, i) => {
+      formData.append(`terms[${i}][term]`, t.term)
+      formData.append(`terms[${i}][definition]`, t.definition)
+      if (t.reading) formData.append(`terms[${i}][reading]`, t.reading)
+      if (t.example_sentence) formData.append(`terms[${i}][example_sentence]`, t.example_sentence)
+    })
 
     const result = await updateSet(set.id, formData)
     if (result?.error) {
@@ -66,42 +79,50 @@ export function EditSetForm({ set, terms: initialTerms }: EditSetFormProps) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-6">
       <div>
         <h1 className="text-heading-sm font-semibold text-ink">Chỉnh sửa bộ thẻ</h1>
         <p className="text-mid-gray">{set.title}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
-          <CardContent className="space-y-4 p-4">
-            <div className="space-y-2">
-              <Label htmlFor="title" required>Tiêu đề</Label>
-              <Input id="title" {...register('title')} />
-              {errors.title && <p className="text-sm text-ember">{errors.title.message as string}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Mô tả</Label>
-              <Input id="description" {...register('description')} />
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch id="is_public" {...register('is_public')} />
-              <Label htmlFor="is_public" className="text-sm text-mid-gray">
-                {isPublic ? 'Công khai' : 'Riêng tư'}
-              </Label>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="flex items-start gap-4">
+          <div className="flex-1 space-y-2">
+            <Input
+              id="title"
+              placeholder="Nhập tiêu đề"
+              className="text-xl font-semibold border-0 border-b-2 border-ash rounded-none px-0 pb-2 focus-visible:ring-0 focus-visible:border-primary-action-fill"
+              {...register('title')}
+            />
+            {errors.title && <p className="text-sm text-ember">{errors.title.message as string}</p>}
+            <Input
+              id="description"
+              placeholder="Thêm mô tả..."
+              className="border-0 border-b border-ash rounded-none px-0 pb-1 text-sm focus-visible:ring-0 focus-visible:border-primary-action-fill"
+              {...register('description')}
+            />
+          </div>
+          <div className="flex items-center gap-2 pt-2">
+            <Switch id="is_public" {...register('is_public')} />
+            <Label htmlFor="is_public" className="text-sm text-mid-gray cursor-pointer">
+              {isPublic ? <Globe className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+            </Label>
+          </div>
+        </div>
+
+        <div className="border-b border-ash pb-2">
+          <span className="text-sm font-medium text-ink">Thuật ngữ ({terms.length} thẻ)</span>
+        </div>
 
         <TermEditor terms={terms} onChange={setTerms} />
 
         {error && <p className="text-sm text-ember">{error}</p>}
 
-        <div className="flex gap-3">
-          <Button type="submit" disabled={loading}>
-            {loading ? <Loader2 className=" h-5 w-5 animate-spin" /> : 'Lưu thay đổi'}
+        <div className="flex gap-3 pt-4 border-t border-ash">
+          <Button type="submit" disabled={loading} size="lg">
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Lưu thay đổi'}
           </Button>
-          <Button type="button" variant="ghost" onClick={() => router.back()}>
+          <Button type="button" variant="ghost" size="lg" onClick={() => router.back()}>
             Huỷ
           </Button>
         </div>

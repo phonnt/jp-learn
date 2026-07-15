@@ -6,12 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Check, X, ArrowRight, RotateCw } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface QuizProps {
   terms: Array<{ term: string; definition: string }>
 }
 
 export function Quiz({ terms }: QuizProps) {
+  const display = useStudySettings((state) => state.quiz.display)
   const { currentIndex, score, answers, questions, setQuestions, answer, nextQuestion, reset } = useQuizStore()
 
   const allOptions = useMemo(() => terms.map(t => t.definition), [terms])
@@ -58,7 +61,7 @@ export function Quiz({ terms }: QuizProps) {
                     <X className="h-5 w-5 text-ember" />
                   )}
                   <span className={a.correct ? 'text-fog' : 'text-charcoal'}>
-                    {questions[i].term}
+                    {display.showKanji ? questions[i].term : '***'}
                   </span>
                 </div>
               ))}
@@ -80,7 +83,10 @@ export function Quiz({ terms }: QuizProps) {
     <div className="mx-auto max-w-lg space-y-6">
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {questions.length}</span>
-        <span>Điểm: {score}</span>
+        <span className="flex items-center gap-2">
+          Điểm: {score}
+          <StudySettingsInline mode="quiz" />
+        </span>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -88,19 +94,21 @@ export function Quiz({ terms }: QuizProps) {
       <Card>
         <CardContent className="p-4">
           <p className="mb-2 text-xs text-fog">Chọn nghĩa đúng của:</p>
-          <p className="mb-6 text-2xl font-semibold text-charcoal">{question.term}</p>
-          <div className="space-y-3">
-            {question.options.map((option, idx) => (
-              <Button
-                key={idx}
-                variant="outline"
-                className="w-full justify-start text-left"
-                onClick={() => { answer(idx); nextQuestion() }}
-              >
-                {option}
-              </Button>
-            ))}
-          </div>
+          {display.showKanji && <p className="mb-6 text-2xl font-semibold text-charcoal">{question.term}</p>}
+          {display.showDefinition && (
+            <div className="space-y-3">
+              {question.options.map((option, idx) => (
+                <Button
+                  key={idx}
+                  variant="outline"
+                  className="w-full justify-start text-left"
+                  onClick={() => { answer(idx); nextQuestion() }}
+                >
+                  {option}
+                </Button>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

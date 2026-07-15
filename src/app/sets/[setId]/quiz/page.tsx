@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Quiz } from '@/components/study/quiz'
+import { StudyHeader } from '@/components/shared/study-header'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,10 +25,7 @@ export default async function QuizPage({ params }: { params: Promise<{ setId: st
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-6">
-      <div className="text-center">
-        <h1 className="text-heading-sm font-semibold text-ink">{set.title}</h1>
-        <p className="text-mid-gray">Quiz — Chọn nghĩa đúng</p>
-      </div>
+      <StudyHeader setId={setId} setTitle={set.title} modeLabel="Quiz" />
       <Quiz
         terms={(terms || []).map(t => ({
           term: t.term,

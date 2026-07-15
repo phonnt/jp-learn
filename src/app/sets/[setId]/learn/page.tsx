@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { LearnMode } from '@/components/study/learn-mode'
+import { StudyHeader } from '@/components/shared/study-header'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,10 +19,7 @@ export default async function LearnPage({ params }: { params: Promise<{ setId: s
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-6">
-      <div className="text-center">
-        <h1 className="text-heading-sm font-semibold text-ink">{set.title}</h1>
-        <p className="text-mid-gray">Học với spaced repetition</p>
-      </div>
+      <StudyHeader setId={setId} setTitle={set.title} modeLabel="Học với spaced repetition" />
       <LearnMode setId={setId} title={set.title} />
     </div>
   )

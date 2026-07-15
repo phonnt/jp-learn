@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { RotateCw, Play, Pause, SkipBack, SkipForward, ChevronLeft, ChevronRight } from 'lucide-react'
+import { StudySettingsInline } from '@/components/study/study-settings-inline'
+import { useStudySettings } from '@/hooks/use-study-settings'
 
 interface AutoPlayFlashcardProps {
   terms: Array<{ term: string; definition: string; reading?: string | null }>
@@ -19,6 +21,8 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const flipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const display = useStudySettings((state) => state.flashcard.display)
+  const activeSide = flipped ? display.back : display.front
   const current = shuffled[currentIndex]
 
   useEffect(() => {
@@ -81,7 +85,10 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
 
       <div className="flex items-center justify-between text-sm text-fog">
         <span>{currentIndex + 1} / {shuffled.length}</span>
-        <span>{flipped ? 'Đã lật' : 'Chưa lật'}</span>
+        <span className="flex items-center gap-2">
+          {flipped ? 'Đã lật' : 'Chưa lật'}
+          <StudySettingsInline mode="flashcard" />
+        </span>
       </div>
 
       <Progress value={((currentIndex + 1) / shuffled.length) * 100} className="h-1" />
@@ -93,11 +100,16 @@ export function AutoPlayFlashcard({ terms }: AutoPlayFlashcardProps) {
         <CardContent className="flex h-[260px] flex-col items-center justify-center p-4 text-center">
           {flipped ? (
             <>
-              <p className="text-lg font-medium text-charcoal">{current.definition}</p>
-              {current.reading && <p className="mt-2 text-sm text-fog">{current.reading}</p>}
+              {activeSide.showDefinition && <p className="text-lg font-medium text-charcoal">{current.definition}</p>}
+              {activeSide.showReading && current.reading && <p className="mt-2 text-sm text-fog">{current.reading}</p>}
+              {activeSide.showKanji && <p className="mt-2 text-sm text-mid-gray">{current.term}</p>}
             </>
           ) : (
-            <p className="text-2xl font-semibold text-charcoal">{current.term}</p>
+            <>
+              {activeSide.showKanji && <p className="text-2xl font-semibold text-charcoal">{current.term}</p>}
+              {activeSide.showReading && current.reading && <p className="mt-2 text-sm text-fog">{current.reading}</p>}
+              {activeSide.showDefinition && <p className="mt-2 text-sm text-mid-gray">{current.definition}</p>}
+            </>
           )}
         </CardContent>
       </Card>
